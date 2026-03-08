@@ -1,0 +1,411 @@
+/* ── Card shell ── */
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Progress bar ── */
+.progressTrack {
+    height: 3px;
+    background: var(--bg-surface);
+}
+
+.progressFill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Step indicators ── */
+.steps {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-lg) var(--space-xl);
+    border-bottom: 1px solid var(--border);
+    gap: var(--space-sm);
+}
+
+.stepItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    transition: color var(--transition-fast);
+}
+
+.stepCircle {
+    width: 26px;
+    height: 26px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all var(--transition-fast);
+}
+
+.stepActive .stepCircle {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 0 12px rgba(0, 212, 170, 0.35);
+}
+
+.stepActive .stepLabel {
+    color: var(--accent);
+}
+
+.stepDone .stepCircle {
+    background: var(--accent-muted);
+    color: var(--accent);
+}
+
+.stepDone .stepLabel {
+    color: var(--text-secondary);
+}
+
+.stepFuture .stepCircle {
+    background: var(--bg-surface);
+    color: var(--text-tertiary);
+    border: 1px solid var(--border);
+}
+
+.stepFuture .stepLabel {
+    color: var(--text-tertiary);
+}
+
+/* ── Step body ── */
+.stepBody {
+    padding: var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.heading h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+}
+
+.heading p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* ── Fields ── */
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.input {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    outline: none;
+    transition: all var(--transition-fast);
+}
+
+.input:hover {
+    border-color: var(--border-hover);
+}
+
+.input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-muted);
+}
+
+.input::placeholder {
+    color: var(--text-muted);
+}
+
+.row2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+}
+
+/* ── Username prefix ── */
+.prefixInput {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.prefix {
+    position: absolute;
+    left: 14px;
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.9rem;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.inputWithPrefix {
+    padding-left: 28px;
+}
+
+/* ── Password eye toggle ── */
+.passwordWrap {
+    position: relative;
+}
+
+.eyeBtn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-tertiary);
+    display: flex;
+    align-items: center;
+    padding: 0;
+    transition: color var(--transition-fast);
+}
+
+.eyeBtn:hover {
+    color: var(--text-secondary);
+}
+
+/* ── Error ── */
+.error {
+    font-size: 0.82rem;
+    color: var(--error);
+    background: var(--error-muted);
+    border-radius: var(--radius-md);
+    padding: 8px 12px;
+}
+
+/* ── Profession pills ── */
+.pillGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 14px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.pill:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-subtle);
+}
+
+.pillActive {
+    border-color: var(--accent);
+    background: var(--accent-muted);
+    color: var(--accent);
+}
+
+/* ── Card preview ── */
+.cardPreview {
+    background: linear-gradient(135deg, #1a2338 0%, #243044 40%, #1a2338 100%);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg) var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cardPreview::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: rgba(0, 212, 170, 0.08);
+}
+
+.cardChip {
+    width: 36px;
+    height: 28px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #d4a017 0%, #f5c842 50%, #d4a017 100%);
+    position: relative;
+}
+
+.cardChip::after {
+    content: '';
+    position: absolute;
+    inset: 6px 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.cardNumber {
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    font-family: 'Courier New', monospace;
+}
+
+.cardMeta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ── Buttons ── */
+.btnPrimary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    width: 100%;
+    padding: 12px 20px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.btnPrimary:hover {
+    background: var(--accent-hover);
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-1px);
+}
+
+.btnPrimary:active {
+    transform: scale(0.98);
+}
+
+.btnSecondary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: 12px 20px;
+    background: var(--bg-surface);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.btnSecondary:hover {
+    background: var(--bg-elevated);
+    border-color: var(--border-hover);
+}
+
+.btnGhost {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 0;
+    background: none;
+    border: none;
+    color: var(--text-tertiary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+}
+
+.btnGhost:hover {
+    color: var(--text-secondary);
+}
+
+/* ── Nav row ── */
+.navRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: var(--space-sm);
+}
+
+.rowBtns {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+}
+
+/* ── Switch auth link ── */
+.switchAuth {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+}
+
+.switchAuth a {
+    color: var(--accent);
+    font-weight: 500;
+}
+
+.switchAuth a:hover {
+    color: var(--accent-hover);
+}

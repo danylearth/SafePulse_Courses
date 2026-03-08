@@ -35,7 +35,7 @@ const enrolledCourses = [
         completedLessons: 10,
         totalLessons: 10,
         lastAccessed: '3 days ago',
-        coverColor: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+        coverColor: 'linear-gradient(135deg, #00d4aa, #00a88a)',
         currentLesson: 'Completed',
         status: 'completed' as const,
     },
@@ -103,9 +103,9 @@ export default function MyCoursesPage() {
                                     <Clock size={12} /> {course.lastAccessed}
                                 </span>
                             </div>
-                            {course.status !== 'completed' && (
-                                <p className="text-sm text-secondary">{course.currentLesson}</p>
-                            )}
+                            <p className="text-sm text-secondary">
+                                {course.status === 'completed' ? '✓ Course completed' : course.currentLesson}
+                            </p>
                         </div>
                         <div className={styles.courseProgress}>
                             <div className={styles.progressBarWrap}>

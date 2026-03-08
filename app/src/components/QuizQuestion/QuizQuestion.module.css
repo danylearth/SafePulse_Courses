@@ -1,10 +1,9 @@
 .card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
+    background: transparent;
+    border: none;
     border-radius: var(--radius-xl);
-    padding: var(--space-xl);
-    box-shadow: var(--shadow-md);
-    max-width: 560px;
+    padding: 0;
+    max-width: 620px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -41,9 +40,9 @@
     display: flex;
     align-items: flex-start;
     gap: var(--space-md);
-    padding: 14px 16px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
+    padding: 14px 18px;
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
     border-radius: var(--radius-md);
     cursor: pointer;
     transition: all var(--transition-fast);
@@ -51,8 +50,8 @@
 }
 
 .option:hover:not(.correct):not(.wrong) {
-    border-color: var(--border-hover);
-    background: var(--bg-tertiary);
+    border-color: var(--accent);
+    background: var(--bg-card-hover);
 }
 
 .selected {

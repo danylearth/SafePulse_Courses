@@ -29,6 +29,10 @@
     backdrop-filter: blur(12px);
 }
 
+.searchWrapper {
+    position: relative;
+}
+
 .searchBar {
     display: flex;
     align-items: center;
@@ -114,5 +118,113 @@
 
     .searchBar {
         width: 200px;
+    }
+}
+
+/* --- Search Clear Button --- */
+.clearBtn {
+    background: none;
+    border: none;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0 2px;
+    display: flex;
+    align-items: center;
+    transition: color var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.clearBtn:hover {
+    color: var(--text-primary);
+}
+
+/* --- Search Dropdown --- */
+.searchDropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    z-index: 60;
+    overflow: hidden;
+    animation: fadeIn 0.15s ease-out;
+}
+
+.searchDropdownLabel {
+    padding: 10px 16px 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-tertiary);
+}
+
+.searchResultItem {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 10px 16px;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: background var(--transition-fast);
+}
+
+.searchResultItem:hover {
+    background: var(--bg-card-hover);
+}
+
+.searchResultIcon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    background: var(--accent-muted);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.searchResultInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.searchResultTitle {
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.searchResultMeta {
+    font-size: 0.72rem;
+    color: var(--text-tertiary);
+}
+
+.searchEmpty {
+    padding: 20px 16px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

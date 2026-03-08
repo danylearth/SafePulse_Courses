@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/authContext';
 import styles from './AccountSettingsModal.module.css';
 import {
     X,
@@ -59,6 +61,8 @@ interface AccountSettingsModalProps {
 }
 
 export default function AccountSettingsModal({ isOpen, onClose }: AccountSettingsModalProps) {
+    const { logout } = useAuth();
+    const router = useRouter();
     const [activeTab, setActiveTab] = useState<TabId>('profile');
 
     // Notification toggles
@@ -123,7 +127,7 @@ export default function AccountSettingsModal({ isOpen, onClose }: AccountSetting
                         })}
                     </div>
                     <div className={styles.sidebarFooter}>
-                        <button className={styles.logoutBtn}>
+                        <button className={styles.logoutBtn} onClick={() => { logout(); router.push('/login'); }}>
                             <LogOut size={18} />
                             Log Out
                         </button>

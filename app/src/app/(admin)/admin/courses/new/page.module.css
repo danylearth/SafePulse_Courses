@@ -335,13 +335,15 @@
 
 .tagInputField {
     background: none;
-    border: none;
-    outline: none;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
     color: var(--text-primary);
     font-size: 0.85rem;
     flex: 1;
     min-width: 80px;
     padding: 2px 0;
+    width: auto;
 }
 
 .tagInputField::placeholder {

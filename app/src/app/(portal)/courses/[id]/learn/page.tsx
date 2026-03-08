@@ -197,10 +197,10 @@ export default function LearnPage() {
                     </button>
                     <h3 className={styles.courseTitle}>{initialCourseData.title}</h3>
                     <Link href={`/courses/${params?.id || '1'}`} className={styles.progressInfo} title="Back to course overview">
-                        <div className="progress-bar">
+                        <div className="progress-bar" style={{ flex: 1 }}>
                             <div className="progress-bar-fill" style={{ width: `${progress}%` }}></div>
                         </div>
-                        <span className="text-xs text-accent">{progress}%</span>
+                        <span className={styles.progressPercent}>{progress}%</span>
                     </Link>
                 </div>
 

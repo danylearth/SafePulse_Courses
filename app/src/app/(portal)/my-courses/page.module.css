@@ -50,7 +50,7 @@
     display: flex;
     align-items: center;
     gap: var(--space-lg);
-    padding: var(--space-md) var(--space-lg);
+    padding: var(--space-lg);
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
@@ -131,12 +131,12 @@
 }
 
 .progressComplete {
-    background: var(--success, #22c55e);
+    background: var(--accent);
 }
 
 .completeText {
-    color: var(--success, #22c55e);
-    font-weight: 600;
+    color: var(--accent);
+    font-weight: 500;
 }
 
 .courseActions {

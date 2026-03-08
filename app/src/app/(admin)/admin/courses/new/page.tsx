@@ -408,39 +408,51 @@ export default function NewCoursePage() {
         setExtractedSections(null);
     };
 
-    /* ───── AI Chat (simulated) ───── */
-    const sendChat = () => {
+    /* ───── AI Chat (OpenRouter) ───── */
+    const [chatLoading, setChatLoading] = useState(false);
+
+    const sendChat = async () => {
         const text = chatInput.trim();
-        if (!text) return;
+        if (!text || chatLoading) return;
         const userMsg: ChatMessage = { id: uid(), role: 'user', content: text };
         setChatMessages((prev) => [...prev, userMsg]);
         setChatInput('');
+        setChatLoading(true);
 
-        // Simulate AI response
-        setTimeout(() => {
-            let response = '';
-            const lower = text.toLowerCase();
-
-            if (lower.includes('title') || lower.includes('name')) {
-                response = `Here are some title ideas based on your course topic:\n\n• "${course.category} Mastery: A Complete Guide"\n• "Essential ${course.category} Protocols"\n• "The ${course.level} Guide to ${course.category}"\n\nA good title should be clear, specific, and hint at the outcome the student will achieve.`;
-            } else if (lower.includes('description')) {
-                response = `For a strong course description, I'd suggest this structure:\n\n**Paragraph 1:** State the problem — what gap does this course fill?\n**Paragraph 2:** What will students learn? List 3-4 key outcomes.\n**Paragraph 3:** Who is this for? Define the ideal student.\n\nKeep it under 200 words for the short description.`;
-            } else if (lower.includes('quiz') || lower.includes('question')) {
-                response = `Great quiz questions test *understanding*, not just memory. Tips:\n\n• Use scenario-based questions ("A patient presents with...")\n• Make wrong answers plausible — avoid obviously silly options\n• Test application of concepts, not just definitions\n• Aim for 3-5 questions per module\n\nWant me to suggest some questions for a specific topic?`;
-            } else if (lower.includes('price') || lower.includes('pricing')) {
-                response = `For pricing, consider:\n\n• **£39-59** for short courses (5-8 hours)\n• **£79-119** for comprehensive courses (10-15 hours)\n• **£129-199** for premium/advanced courses (15+ hours)\n\nSale prices typically offer 20-30% off. Your course has ${course.sections.length} sections — that puts it in the mid range.`;
-            } else if (lower.includes('section') || lower.includes('structure') || lower.includes('curriculum')) {
-                response = `A well-structured course typically follows this pattern:\n\n1. **Introduction** — Context, expectations, overview\n2. **Foundation** — Core concepts, terminology\n3. **Deep Dives** — 2-4 sections on specific topics\n4. **Application** — Case studies, real examples\n5. **Summary** — Review, next steps, resources\n\nEach section should have 3-5 lessons with a mix of video, articles, and quizzes.`;
-            } else if (lower.includes('tag')) {
-                response = `Tags help students discover your course. I'd suggest:\n\n• **Topic tags:** ${course.category}, specific subtopics\n• **Level tags:** ${course.level}, prerequisites\n• **Format tags:** Video, Articles, Quizzes\n• **Audience tags:** Who it's for (Athletes, Coaches, etc.)\n\nAim for 5-8 tags per course.`;
-            } else {
-                response = `That's a great question! Here are some general tips for course creation:\n\n• Keep lessons under 15 minutes for better retention\n• Include a quiz after every 3-4 lessons\n• Mix content types (video + article) to keep engagement high\n• Write clear learning outcomes for each section\n\nCan I help with something more specific? Try asking about titles, pricing, structure, or quizzes.`;
-            }
-
-            const aiMsg: ChatMessage = { id: uid(), role: 'assistant', content: response };
+        try {
+            const res = await fetch('/api/course-assistant', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    messages: [...chatMessages, userMsg]
+                        .filter((m) => m.id !== 'welcome')
+                        .map((m) => ({ role: m.role, content: m.content })),
+                    courseContext: {
+                        title: course.title,
+                        category: course.category,
+                        level: course.level,
+                        sections: course.sections.length,
+                        tags: course.tags,
+                    },
+                }),
+            });
+            const data = await res.json();
+            const aiMsg: ChatMessage = {
+                id: uid(),
+                role: 'assistant',
+                content: data.content || data.error || 'Sorry, something went wrong.',
+            };
             setChatMessages((prev) => [...prev, aiMsg]);
-        }, 800);
+        } catch {
+            setChatMessages((prev) => [
+                ...prev,
+                { id: uid(), role: 'assistant', content: 'Network error — please try again.' },
+            ]);
+        } finally {
+            setChatLoading(false);
+        }
     };
+
 
     /* ───── Validation ───── */
     const getWarnings = (): string[] => {
@@ -1195,28 +1207,32 @@ export default function NewCoursePage() {
                                 fontSize: '0.85rem',
                                 outline: 'none',
                                 fontFamily: 'inherit',
+                                opacity: chatLoading ? 0.6 : 1,
                             }}
-                            placeholder="Ask about course creation..."
+                            placeholder={chatLoading ? 'Thinking...' : 'Ask about course creation...'}
                             value={chatInput}
                             onChange={(e) => setChatInput(e.target.value)}
+                            disabled={chatLoading}
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter') sendChat();
                             }}
                         />
                         <button
                             onClick={sendChat}
+                            disabled={chatLoading}
                             style={{
                                 width: 34,
                                 height: 34,
                                 borderRadius: 'var(--radius-full)',
-                                background: 'var(--accent)',
+                                background: chatLoading ? 'var(--bg-surface)' : 'var(--accent)',
                                 border: 'none',
-                                color: 'var(--text-inverse)',
+                                color: chatLoading ? 'var(--text-muted)' : 'var(--text-inverse)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                cursor: 'pointer',
+                                cursor: chatLoading ? 'not-allowed' : 'pointer',
                                 flexShrink: 0,
+                                transition: 'all 0.2s',
                             }}
                         >
                             <Send size={14} />

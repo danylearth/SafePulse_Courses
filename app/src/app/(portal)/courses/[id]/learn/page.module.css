@@ -1,9 +1,10 @@
 .player {
     display: flex;
     min-height: 100vh;
-    margin-left: calc(-1 * var(--sidebar-width) - var(--space-xl));
+    /* Escape content area padding only — sidebar offset is handled by the portal layout */
+    margin-left: calc(-1 * var(--space-xl));
     margin-top: calc(-1 * var(--header-height) - var(--space-xl));
-    width: calc(100% + var(--sidebar-width) + var(--space-xl) * 2);
+    width: calc(100% + var(--space-xl) * 2);
 }
 
 /* Sidebar */
@@ -50,6 +51,7 @@
 
 .courseTitle {
     font-size: 0.95rem;
+    font-weight: 500;
     line-height: 1.4;
 }
 
@@ -57,6 +59,27 @@
     display: flex;
     align-items: center;
     gap: var(--space-sm);
+    cursor: pointer;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    padding: 4px 6px;
+    margin: -4px -6px;
+    transition: background var(--transition-fast);
+}
+
+.progressInfo:hover {
+    background: var(--bg-surface);
+}
+
+.progressInfo:hover .progressPercent {
+    text-decoration: underline;
+}
+
+.progressPercent {
+    font-size: 0.75rem;
+    color: var(--accent);
+    font-weight: 600;
+    white-space: nowrap;
 }
 
 .sidebarNav {
@@ -73,9 +96,10 @@
     align-items: center;
     justify-content: space-between;
     padding: 12px var(--space-lg);
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-primary);
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    letter-spacing: 0.01em;
 }
 
 .navLessons {
@@ -111,16 +135,15 @@
 
 .navLessonLeft {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: var(--space-sm);
     flex: 1;
     min-width: 0;
 }
 
 .navLessonLeft span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: normal;
+    line-height: 1.35;
 }
 
 .completedIcon {

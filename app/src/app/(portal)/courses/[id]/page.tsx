@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { useParams, useSearchParams } from 'next/navigation';
 import styles from './page.module.css';
-import { Star, Users, BookOpen, Clock, Play, ChevronDown, ChevronUp, Award, FileText, Video, Download, Shield } from 'lucide-react';
+import { Star, Users, BookOpen, Clock, Play, ChevronDown, ChevronUp, Award, FileText, Video, Download, Shield, CheckCircle2, Circle, RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 
 const course = {
@@ -72,8 +73,20 @@ const course = {
     ],
 };
 
+// Mock progress data (will come from Supabase later)
+// NOTE: set enrolled: true to preview the enrolled state
+const enrolledProgress = {
+    enrolled: false,
+    progress: 45,
+    completedLessons: ['l1', 'l2', 'l3', 'l4', 'l5'],
+    currentLessonId: 'l6',
+    currentLesson: 'Anabolic vs. Androgenic Effects',
+    currentSection: 'Week 2 - Pharmacology Basics',
+};
+
 export default function CourseDetailPage() {
-    const [expandedSections, setExpandedSections] = useState<number[]>([0]);
+    const params = useParams();
+    const [expandedSections, setExpandedSections] = useState<number[]>([0, 1]);
 
     const toggleSection = (index: number) => {
         setExpandedSections((prev) =>
@@ -187,44 +200,106 @@ export default function CourseDetailPage() {
 
                 {/* Sidebar */}
                 <aside className={styles.sidebar}>
-                    <div className={`card ${styles.buyCard}`}>
-                        <div className={styles.buyCover} style={{ background: course.coverColor }}>
-                            <div className={styles.playOverlay}>
-                                <Play size={32} fill="white" />
+                    {enrolledProgress.enrolled ? (
+                        /* Enrolled: show progress card */
+                        <div className={`card ${styles.buyCard}`}>
+                            <div className={styles.buyCover} style={{ background: course.coverColor }}>
+                                <div className={styles.playOverlay}>
+                                    <Play size={32} fill="white" />
+                                </div>
                             </div>
-                        </div>
-                        <div className={styles.buyBody}>
-                            <div className={styles.priceRow}>
-                                {course.salePrice ? (
-                                    <>
-                                        <span className={styles.salePrice}>${course.salePrice}</span>
-                                        <span className={styles.originalPrice}>${course.price}</span>
-                                    </>
-                                ) : (
-                                    <span className={styles.price}>${course.price.toFixed(2)}</span>
-                                )}
-                            </div>
-                            <button className="btn btn-primary btn-lg w-full">
-                                <Play size={18} /> Buy Course Now
-                            </button>
-                            <button className="btn btn-secondary btn-lg w-full">
-                                Preview Course
-                            </button>
+                            <div className={styles.buyBody}>
+                                {/* Overall progress */}
+                                <div className={styles.progressSection}>
+                                    <div className={styles.progressHeader}>
+                                        <span className="text-sm" style={{ fontWeight: 600 }}>Your Progress</span>
+                                        <span className="text-sm text-accent" style={{ fontWeight: 700 }}>{enrolledProgress.progress}%</span>
+                                    </div>
+                                    <div className="progress-bar" style={{ height: '8px' }}>
+                                        <div className="progress-bar-fill" style={{ width: `${enrolledProgress.progress}%` }}></div>
+                                    </div>
+                                    <span className="text-xs text-secondary">
+                                        {enrolledProgress.completedLessons.length} of {course.sections.reduce((t, s) => t + s.lessons.length, 0)} lessons completed
+                                    </span>
+                                </div>
 
-                            <div className={styles.includesList}>
-                                <h5>This course includes</h5>
-                                {course.includes.map((item, i) => {
-                                    const Icon = item.icon;
-                                    return (
-                                        <div key={i} className={styles.includeItem}>
-                                            <Icon size={16} />
-                                            <span className="text-sm">{item.text}</span>
+                                {/* Current lesson */}
+                                <div className={styles.currentLesson}>
+                                    <span className="text-xs text-tertiary" style={{ textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 600 }}>Currently On</span>
+                                    <div className={styles.currentLessonInfo}>
+                                        <div className={styles.currentLessonDot}></div>
+                                        <div>
+                                            <p className="text-sm" style={{ fontWeight: 500 }}>{enrolledProgress.currentLesson}</p>
+                                            <p className="text-xs text-tertiary">{enrolledProgress.currentSection}</p>
                                         </div>
-                                    );
-                                })}
+                                    </div>
+                                </div>
+
+                                <Link
+                                    href={`/courses/${params?.id || course.id}/learn`}
+                                    className="btn btn-primary btn-lg w-full"
+                                >
+                                    <Play size={18} /> Continue Learning
+                                </Link>
+                                <button className="btn btn-ghost btn-sm w-full" style={{ color: 'var(--text-tertiary)' }}>
+                                    <RotateCcw size={14} /> Restart Course
+                                </button>
+
+                                <div className={styles.includesList}>
+                                    <h5>This course includes</h5>
+                                    {course.includes.map((item, i) => {
+                                        const Icon = item.icon;
+                                        return (
+                                            <div key={i} className={styles.includeItem}>
+                                                <Icon size={16} />
+                                                <span className="text-sm">{item.text}</span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    ) : (
+                        /* Not enrolled: show buy card */
+                        <div className={`card ${styles.buyCard}`}>
+                            <div className={styles.buyCover} style={{ background: course.coverColor }}>
+                                <div className={styles.playOverlay}>
+                                    <Play size={32} fill="white" />
+                                </div>
+                            </div>
+                            <div className={styles.buyBody}>
+                                <div className={styles.priceRow}>
+                                    {course.salePrice ? (
+                                        <>
+                                            <span className={styles.salePrice}>${course.salePrice}</span>
+                                            <span className={styles.originalPrice}>${course.price}</span>
+                                        </>
+                                    ) : (
+                                        <span className={styles.price}>${course.price.toFixed(2)}</span>
+                                    )}
+                                </div>
+                                <button className="btn btn-primary btn-lg w-full">
+                                    <Play size={18} /> Buy Course Now
+                                </button>
+                                <button className="btn btn-secondary btn-lg w-full">
+                                    Preview Course
+                                </button>
+
+                                <div className={styles.includesList}>
+                                    <h5>This course includes</h5>
+                                    {course.includes.map((item, i) => {
+                                        const Icon = item.icon;
+                                        return (
+                                            <div key={i} className={styles.includeItem}>
+                                                <Icon size={16} />
+                                                <span className="text-sm">{item.text}</span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </aside>
             </div>
         </div>

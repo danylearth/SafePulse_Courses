@@ -226,6 +226,88 @@
     transform: scale(1.1);
 }
 
+/* Enrolled progress overlay on cover */
+.coverProgress {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(6px);
+    border-radius: var(--radius-lg);
+    padding: 16px 28px;
+}
+
+.coverProgressPct {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1;
+}
+
+.coverProgressLabel {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* Progress section */
+.progressSection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.progressHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Current lesson indicator */
+.currentLesson {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--bg-surface);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+}
+
+.currentLessonInfo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.currentLessonDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    box-shadow: 0 0 6px var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        box-shadow: 0 0 6px var(--accent);
+    }
+
+    50% {
+        opacity: 0.6;
+        box-shadow: 0 0 12px var(--accent);
+    }
+}
+
 .buyBody {
     padding: var(--space-lg);
     display: flex;
