@@ -1,0 +1,229 @@
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    box-shadow: var(--shadow-md);
+    max-width: 560px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    animation: fadeIn 0.4s ease-out;
+}
+
+.questionBlock {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.questionText {
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--text-primary);
+}
+
+.subtitle {
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+}
+
+/* Options */
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.option {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    padding: 14px 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+.option:hover:not(.correct):not(.wrong) {
+    border-color: var(--border-hover);
+    background: var(--bg-tertiary);
+}
+
+.selected {
+    border-color: var(--accent) !important;
+    background: var(--accent-subtle) !important;
+}
+
+.correct {
+    border-color: var(--success) !important;
+    background: var(--success-muted) !important;
+}
+
+.wrong {
+    border-color: var(--error) !important;
+    background: var(--error-muted) !important;
+}
+
+/* Custom Radio */
+.radio {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.radio input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.radioCircle {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-hover);
+    border-radius: 50%;
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+.radioCircle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    transition: transform var(--transition-fast);
+}
+
+.radio input:checked+.radioCircle {
+    border-color: var(--accent);
+}
+
+.radio input:checked+.radioCircle::after {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.correct .radioCircle {
+    border-color: var(--success);
+}
+
+.correct .radioCircle::after {
+    background: var(--success);
+}
+
+.wrong .radioCircle {
+    border-color: var(--error);
+}
+
+.wrong .radioCircle::after {
+    background: var(--error);
+}
+
+.optionText {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+    flex: 1;
+}
+
+.correctIcon {
+    color: var(--success);
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.wrongIcon {
+    color: var(--error);
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+/* Actions */
+.actions {
+    display: flex;
+    justify-content: center;
+    padding-top: var(--space-sm);
+}
+
+.submitBtn {
+    padding: 12px 48px;
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.submitBtn:hover:not(:disabled) {
+    background: var(--accent);
+    color: var(--text-inverse);
+}
+
+.submitBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.resultRow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.resultCorrect {
+    font-weight: 600;
+    color: var(--success);
+    font-size: 0.95rem;
+}
+
+.resultWrong {
+    font-weight: 600;
+    color: var(--error);
+    font-size: 0.95rem;
+}
+
+.retryBtn {
+    padding: 8px 20px;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.retryBtn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

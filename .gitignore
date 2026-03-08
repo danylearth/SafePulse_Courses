@@ -1,0 +1,13 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Reference screenshots (design only)
+references/
+
+# Empty assets folder
+assets/
+
+# Gemini / agent artifacts
+.gemini/
+.agents/

@@ -1,0 +1,285 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+    animation: fadeIn 0.4s ease-out;
+}
+
+.pageHeader h1 {
+    margin-bottom: 4px;
+}
+
+.layout {
+    display: flex;
+    gap: var(--space-xl);
+}
+
+/* Sidebar Filters */
+.filters {
+    width: 220px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+}
+
+.filterSearch {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 8px 12px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-tertiary);
+}
+
+.filterSearch:focus-within {
+    border-color: var(--accent);
+}
+
+.filterInput {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    width: 100%;
+}
+
+.categories {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.categories h6 {
+    margin-bottom: var(--space-sm);
+    color: var(--text-tertiary);
+}
+
+.categoryBtn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 8px 12px;
+    border: none;
+    background: none;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.categoryBtn:hover {
+    background: var(--bg-surface);
+    color: var(--text-primary);
+}
+
+.categoryActive {
+    background: var(--accent-muted) !important;
+    color: var(--accent) !important;
+    font-weight: 600;
+}
+
+.filterSection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.filterSection h6 {
+    margin-bottom: var(--space-xs);
+    color: var(--text-tertiary);
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkbox input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border-hover);
+    border-radius: 4px;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.checkbox input:checked {
+    border-color: var(--accent);
+    background: var(--accent);
+}
+
+.checkbox input:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+/* Course Grid */
+.courseGrid {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.gridHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sortSelect {
+    padding: 8px 14px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    outline: none;
+    transition: all var(--transition-fast);
+}
+
+.sortSelect:hover {
+    border-color: var(--border-hover);
+}
+
+.sortSelect:focus {
+    border-color: var(--accent);
+}
+
+.grid {
+    gap: var(--space-md);
+}
+
+/* Course Card */
+.courseCard {
+    padding: 0;
+    overflow: hidden;
+}
+
+.cardCover {
+    height: 150px;
+    position: relative;
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cardStats {
+    display: flex;
+    gap: var(--space-md);
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+}
+
+.cardStats span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.cardBody {
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.cardBody h4 {
+    font-size: 0.95rem;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.cardBody p {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.5;
+}
+
+.cardMeta {
+    display: flex;
+    gap: var(--space-lg);
+    margin-top: var(--space-xs);
+}
+
+.cardMeta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.cardFooter {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--border);
+}
+
+.price {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.salePrice {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.originalPrice {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-decoration: line-through;
+}
+
+@media (max-width: 1024px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    .filters {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .categories {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: var(--space-xs);
+    }
+}

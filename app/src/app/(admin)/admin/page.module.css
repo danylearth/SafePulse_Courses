@@ -1,0 +1,234 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+    animation: fadeIn 0.4s ease-out;
+}
+
+.pageHeader h1 {
+    margin-bottom: 4px;
+}
+
+/* Stats */
+.statsGrid {
+    gap: var(--space-md);
+}
+
+.statCard {
+    padding: var(--space-lg);
+}
+
+.statTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-md);
+}
+
+.statIcon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--accent-muted);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.statChange {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.positive {
+    color: var(--success);
+}
+
+.negative {
+    color: var(--error);
+}
+
+.statBottom {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.statValue {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.statLabel {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* Columns */
+.columns {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: var(--space-md);
+}
+
+/* Chart */
+.chartCard {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.chartHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chart {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--space-lg);
+    height: 200px;
+    padding-top: var(--space-lg);
+}
+
+.chartCol {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+    height: 100%;
+    justify-content: flex-end;
+}
+
+.chartBar {
+    width: 100%;
+    max-width: 48px;
+    background: linear-gradient(180deg, var(--accent), rgba(0, 212, 170, 0.4));
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    position: relative;
+    transition: height var(--transition-slow);
+    min-height: 4px;
+}
+
+.chartBar:hover {
+    opacity: 0.85;
+}
+
+.chartTooltip {
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 0.72rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    pointer-events: none;
+}
+
+.chartBar:hover .chartTooltip {
+    opacity: 1;
+}
+
+.chartLabel {
+    font-size: 0.78rem;
+    color: var(--text-tertiary);
+}
+
+/* Top Courses */
+.topCoursesCard {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.topCoursesList {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.topCourseItem {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.topCourseItem:last-child {
+    border-bottom: none;
+}
+
+.topCourseRank {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+}
+
+.topCourseInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.topCourseTitle {
+    font-size: 0.88rem;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.topCourseRight {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.topCourseRevenue {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Sales */
+.salesCard {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.salesHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@media (max-width: 1024px) {
+    .columns {
+        grid-template-columns: 1fr;
+    }
+}
