@@ -35,6 +35,8 @@ export interface CourseRecord {
 }
 
 const STORAGE_KEY = 'safepulse_courses';
+const VERSION_KEY = 'safepulse_courses_version';
+const CURRENT_VERSION = 2;
 
 const defaultCourses: CourseRecord[] = [
     {
@@ -189,6 +191,23 @@ const defaultCourses: CourseRecord[] = [
         lastUpdated: 'Feb 28, 2026',
         revenue: '£9,599',
     },
+    {
+        id: 'athlete-code',
+        title: 'Enhanced Games Athlete Code',
+        description: 'The complete guide to performance protection, enhancing drug guidelines, and harm reduction for Enhanced Games athletes.',
+        level: 'Intermediate',
+        category: 'Education',
+        lessons: 50,
+        duration: '~25 hours',
+        students: 0,
+        rating: 0,
+        price: 0,
+        salePrice: null,
+        coverColor: 'linear-gradient(135deg, #f59e0b, #d97706)',
+        tags: ['Athlete Code', 'Enhanced Games', 'PES', 'Harm Reduction'],
+        status: 'Published',
+        lastUpdated: 'Mar 2026',
+    },
 ];
 
 function loadFromStorage(): CourseRecord[] {
@@ -241,11 +260,25 @@ export function generateId(): string {
     return `course_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
 }
 
-/** Seed localStorage with defaults if empty (call once on app load) */
+/** Seed localStorage with defaults if empty, and merge new courses on version bump */
 export function ensureDefaults(): void {
     if (typeof window === 'undefined') return;
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
         saveToStorage(defaultCourses);
+        localStorage.setItem(VERSION_KEY, String(CURRENT_VERSION));
+        return;
+    }
+    // Version migration: merge new default courses that don't exist yet
+    const storedVersion = parseInt(localStorage.getItem(VERSION_KEY) || '1', 10);
+    if (storedVersion < CURRENT_VERSION) {
+        const existing = loadFromStorage();
+        for (const dc of defaultCourses) {
+            if (!existing.find((c) => c.id === dc.id)) {
+                existing.push(dc);
+            }
+        }
+        saveToStorage(existing);
+        localStorage.setItem(VERSION_KEY, String(CURRENT_VERSION));
     }
 }

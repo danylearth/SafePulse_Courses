@@ -1,0 +1,5 @@
+export const content = `
+Performance Enhancing Substances are used to improve athletic performance, endurance, recovery as well as physical appearance. PESs encompass a wide range of compounds from hormones, growth hormone, stimulants, EPO, certain medications and peripheral drugs such beta-2 agonists. From a sports performance perspective any drug or substance which is not approved by WADA and the IOC is considered a performance enhancing substance. These substances can be found on the WADA’s Prohibited List which is updated annually, coming into effect each year on 01st January.  If found guilty of using these prohibited substances, athletes can be banned, typically for a period of 4-years,, lose their titles, be banned from coaching, as well as public shame and condemnation.
+
+PES have been used medically for decades. The list below describes some of the drugs used for performance enhancement as well as having medical use as well as when they were medically approved for use by the American FDA.
+`;

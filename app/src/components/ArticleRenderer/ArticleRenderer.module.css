@@ -1,0 +1,110 @@
+.articleContent {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.articleBody {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    line-height: 1.8;
+    color: var(--text-secondary);
+}
+
+.articleBody h2 {
+    color: var(--text-primary);
+    margin-top: var(--space-xl);
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.articleBody h3 {
+    color: var(--text-primary);
+    margin-top: var(--space-md);
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.articleBody h4 {
+    color: var(--text-primary);
+    margin-top: var(--space-sm);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.articleBody p {
+    margin: 0;
+}
+
+.articleBody blockquote {
+    border-left: 3px solid var(--accent);
+    padding-left: var(--space-lg);
+    color: var(--text-primary);
+    font-style: italic;
+    margin: var(--space-md) 0;
+}
+
+.articleBody ul,
+.articleBody ol {
+    padding-left: var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.articleBody li::marker {
+    color: var(--accent);
+}
+
+.articleBody strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.articleBody em {
+    font-style: italic;
+}
+
+/* Table styles */
+.tableWrapper {
+    overflow-x: auto;
+    margin: var(--space-md) 0;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.table thead {
+    background: var(--bg-tertiary, rgba(255, 255, 255, 0.05));
+}
+
+.table th {
+    padding: var(--space-sm) var(--space-md);
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--accent);
+    white-space: nowrap;
+}
+
+.table td {
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    vertical-align: top;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table tbody tr:hover {
+    background: var(--bg-tertiary, rgba(255, 255, 255, 0.03));
+}

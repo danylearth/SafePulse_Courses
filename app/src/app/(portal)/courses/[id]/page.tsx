@@ -4,9 +4,27 @@ import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
 import styles from './page.module.css';
 import { Star, Users, BookOpen, Clock, Play, ChevronDown, ChevronUp, Award, FileText, Video, Download, Shield, CheckCircle2, Circle, RotateCcw } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const course = {
+interface CourseData {
+    id: string;
+    title: string;
+    description: string;
+    level: string;
+    rating: number;
+    reviewCount: number;
+    students: number;
+    price: number;
+    salePrice: number | null;
+    coverColor: string;
+    totalSections: number;
+    totalLessons: number;
+    totalDuration: string;
+    includes: { icon: React.ComponentType<{ size: number }>; text: string }[];
+    sections: { title: string; lessons: { title: string; type: string; duration: string }[] }[];
+}
+
+const demoCourse: CourseData = {
     id: '1',
     title: 'PED Safety & Harm Reduction Fundamentals',
     description: 'This comprehensive course provides a solid foundation in understanding the risks, safe practices, and monitoring protocols essential for anyone involved in performance-enhancing drug use. Built from SafePulse\'s evidence-based research, this course covers everything from basic pharmacology to advanced risk assessment frameworks.\n\nWhether you\'re a healthcare professional, coach, or individual looking to make more informed decisions, this course will equip you with the knowledge to reduce harm and prioritise long-term health.',
@@ -73,6 +91,50 @@ const course = {
     ],
 };
 
+function getAthleteCodeCourseData(): CourseData | null {
+    try {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const { athleteCodeCourse } = require('@/data/courses/athlete-code');
+        return {
+            id: 'athlete-code',
+            title: athleteCodeCourse.title,
+            description: athleteCodeCourse.longDescription || athleteCodeCourse.description,
+            level: athleteCodeCourse.level,
+            rating: 0,
+            reviewCount: 0,
+            students: 0,
+            price: 0,
+            salePrice: null,
+            coverColor: athleteCodeCourse.coverColor,
+            totalSections: 1,
+            totalLessons: athleteCodeCourse.totalLessons,
+            totalDuration: athleteCodeCourse.duration,
+            includes: [
+                { icon: FileText, text: '50 articles & reading materials' },
+                { icon: Award, text: 'Certificate of completion' },
+                { icon: Shield, text: 'Lifetime access' },
+            ],
+            sections: [{
+                title: 'Enhanced Games Athlete Code',
+                lessons: athleteCodeCourse.lessons.map((l: { title: string; type: string; duration: string }) => ({
+                    title: l.title,
+                    type: l.type,
+                    duration: l.duration,
+                })),
+            }],
+        };
+    } catch {
+        return null;
+    }
+}
+
+function getCourseById(id: string): CourseData {
+    if (id === 'athlete-code') {
+        return getAthleteCodeCourseData() || demoCourse;
+    }
+    return demoCourse;
+}
+
 // Mock progress data (will come from Supabase later)
 // NOTE: set enrolled: true to preview the enrolled state
 const enrolledProgress = {
@@ -86,7 +148,10 @@ const enrolledProgress = {
 
 export default function CourseDetailPage() {
     const params = useParams();
-    const [expandedSections, setExpandedSections] = useState<number[]>([0, 1]);
+    const courseId = (params?.id as string) || '1';
+    const course = getCourseById(courseId);
+    const isAthleteCode = courseId === 'athlete-code';
+    const [expandedSections, setExpandedSections] = useState<number[]>([0]);
 
     const toggleSection = (index: number) => {
         setExpandedSections((prev) =>
@@ -200,7 +265,7 @@ export default function CourseDetailPage() {
 
                 {/* Sidebar */}
                 <aside className={styles.sidebar}>
-                    {enrolledProgress.enrolled ? (
+                    {(enrolledProgress.enrolled || isAthleteCode) ? (
                         /* Enrolled: show progress card */
                         <div className={`card ${styles.buyCard}`}>
                             <div className={styles.buyCover} style={{ background: course.coverColor }}>

@@ -1,0 +1,9 @@
+export const content = `
+The world of performance and enhancement is always changing. As an athlete, you have the right, and the responsibility, to stay informed about what you put in your body and how it affects your health. You should expect transparency, proper medical oversight, and guidance that reflects the latest research, rather than relying on social media hype or anecdotal advice.
+
+Finding a doctor or health professional who understands enhancement and works within a harm reduction framework is critical. Many athletes avoid doctors because of stigma or fear of judgment, but having access to knowledgeable medical support can help you prevent serious health issues, detect problems early, and make safer decisions (Cox et al., 2024).
+
+It is also important to educate yourself on the substances you use, their effects, and how new research might change recommendations for safer use. Studies show that off-label use of medicines for body composition, recovery, or cognitive performance is becoming common, and understanding these trends can better help you make informed choices (Piatkowski et al., 2025; Cox & Piatkowski, 2024). Moreover, you should critically evaluate information from influencers or online forums as misinformation is rife and rely on credible, evidence-based sources. Credible information sources will be provided through TEG educational sessions - delivered by world-leading experts.
+
+You can play an active role in improving safety and knowledge for yourself and others. Participating in research, providing anonymized feedback, or sharing your experiences in trusted studies helps the community and contributes to better guidance for all athletes. By staying informed, seeking expert advice, and participating in research, you become more than an enhanced athlete; you become a partner and pioneer in creating safer, evidence-based practices in the world of enhancement.
+`;

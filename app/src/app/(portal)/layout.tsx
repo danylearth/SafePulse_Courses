@@ -20,6 +20,7 @@ const ALL_COURSES = [
     { id: '5', title: 'Post-Cycle Recovery: Complete Guide', enrolled: false },
     { id: '6', title: 'Advanced Dosing Logic & Interaction Mapping', enrolled: false },
     { id: '7', title: 'Blood Work Interpretation for Athletes', enrolled: false },
+    { id: 'athlete-code', title: 'Enhanced Games Athlete Code', enrolled: true },
 ];
 
 export default function PortalLayout({

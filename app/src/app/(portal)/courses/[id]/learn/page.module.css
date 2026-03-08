@@ -235,9 +235,23 @@
     color: var(--text-secondary);
 }
 
+.articleBody h2 {
+    color: var(--text-primary);
+    margin-top: var(--space-xl);
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
 .articleBody h3 {
     color: var(--text-primary);
     margin-top: var(--space-md);
+}
+
+.articleBody h4 {
+    color: var(--text-primary);
+    margin-top: var(--space-sm);
+    font-size: 1rem;
+    font-weight: 600;
 }
 
 .articleBody blockquote {

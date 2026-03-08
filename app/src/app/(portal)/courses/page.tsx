@@ -128,6 +128,20 @@ const allCourses = [
         salePrice: null,
         coverColor: 'linear-gradient(135deg, #f97316, #ea580c)',
     },
+    {
+        id: 'athlete-code',
+        title: 'Enhanced Games Athlete Code',
+        description: 'The complete guide to performance protection, enhancing drug guidelines, and harm reduction for Enhanced Games athletes.',
+        level: 'Intermediate',
+        category: 'Education',
+        lessons: 50,
+        duration: '~25 hours',
+        students: 0,
+        rating: 0,
+        price: 0,
+        salePrice: null,
+        coverColor: 'linear-gradient(135deg, #f59e0b, #d97706)',
+    },
 ];
 
 type SortOption = 'popular' | 'newest' | 'price-low' | 'price-high' | 'rating';
