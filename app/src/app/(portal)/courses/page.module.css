@@ -189,6 +189,11 @@
     justify-content: space-between;
 }
 
+.cardCoverImage {
+    background-size: cover;
+    background-position: center;
+}
+
 .cardStats {
     display: flex;
     gap: var(--space-md);

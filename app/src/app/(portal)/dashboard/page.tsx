@@ -14,6 +14,7 @@ const enrolledCourses = [
         completedLessons: 16,
         lastAccessed: '2 hours ago',
         coverColor: 'linear-gradient(135deg, #00d4aa, #00a88a)',
+        coverImage: '/thumbnails/runner.png',
     },
     {
         id: '2',
@@ -23,6 +24,7 @@ const enrolledCourses = [
         completedLessons: 6,
         lastAccessed: '1 day ago',
         coverColor: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+        coverImage: '/thumbnails/light-trails.png',
     },
     {
         id: '3',
@@ -32,6 +34,7 @@ const enrolledCourses = [
         completedLessons: 4,
         lastAccessed: '3 days ago',
         coverColor: 'linear-gradient(135deg, #f59e0b, #d97706)',
+        coverImage: '/thumbnails/abstract-lens.png',
     },
 ];
 
@@ -44,6 +47,7 @@ const recommendedCourses = [
         duration: '8 hours',
         price: 79.99,
         coverColor: 'linear-gradient(135deg, #ec4899, #be185d)',
+        coverImage: '/thumbnails/spotlight.png',
     },
     {
         id: '5',
@@ -53,6 +57,7 @@ const recommendedCourses = [
         duration: '12 hours',
         price: 59.99,
         coverColor: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+        coverImage: '/thumbnails/runner.png',
     },
     {
         id: '6',
@@ -62,6 +67,7 @@ const recommendedCourses = [
         duration: '16 hours',
         price: 129.99,
         coverColor: 'linear-gradient(135deg, #14b8a6, #0d9488)',
+        coverImage: '/thumbnails/light-trails.png',
     },
     {
         id: '7',
@@ -71,6 +77,7 @@ const recommendedCourses = [
         duration: '5 hours',
         price: 39.99,
         coverColor: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+        coverImage: '/thumbnails/abstract-lens.png',
     },
 ];
 
@@ -129,7 +136,10 @@ export default function DashboardPage() {
                             href={`/courses/${course.id}/learn`}
                             className={`card card-hover card-interactive ${styles.enrolledCard}`}
                         >
-                            <div className={styles.enrolledCover} style={{ background: course.coverColor }}>
+                            <div className={styles.enrolledCover} style={course.coverImage
+                                ? { backgroundImage: `url(${course.coverImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                                : { background: course.coverColor }
+                            }>
                                 <div className={styles.playButton}>
                                     <Play size={20} fill="white" />
                                 </div>
@@ -169,7 +179,10 @@ export default function DashboardPage() {
                             href={`/courses/${course.id}`}
                             className={`card card-hover card-interactive ${styles.recommendedCard}`}
                         >
-                            <div className={styles.recommendedCover} style={{ background: course.coverColor }}>
+                            <div className={styles.recommendedCover} style={course.coverImage
+                                ? { backgroundImage: `url(${course.coverImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                                : { background: course.coverColor }
+                            }>
                                 <span className={`badge badge-accent ${styles.levelBadge}`}>{course.level}</span>
                             </div>
                             <div className={styles.recommendedInfo}>

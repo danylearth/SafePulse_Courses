@@ -1,100 +1,37 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import styles from './page.module.css';
-import { Plus, Search, Edit3, Copy, Archive, BookOpen, Users, Clock } from 'lucide-react';
+import { Plus, Search, Edit3, Copy, Archive, ArchiveRestore, BookOpen, Users, Clock } from 'lucide-react';
+import { getCourses, saveCourse, ensureDefaults, type CourseRecord } from '@/lib/courseStore';
 
 type CourseStatus = 'All' | 'Published' | 'Draft' | 'Archived';
-
-const mockCourses = [
-    {
-        id: '1',
-        title: 'PED Safety & Harm Reduction Fundamentals',
-        category: 'Safety',
-        level: 'Beginner',
-        status: 'Published' as const,
-        students: 1240,
-        lessons: 24,
-        revenue: '£14,039',
-        lastUpdated: 'Mar 5, 2026',
-        coverColor: 'linear-gradient(135deg, #00d4aa, #00a88a)',
-        tags: ['Safety', 'Fundamentals', 'Harm Reduction'],
-    },
-    {
-        id: '2',
-        title: 'Longevity Protocols: Biomarker Management',
-        category: 'Longevity',
-        level: 'Intermediate',
-        status: 'Published' as const,
-        students: 856,
-        lessons: 18,
-        revenue: '£6,959',
-        lastUpdated: 'Mar 3, 2026',
-        coverColor: 'linear-gradient(135deg, #6366f1, #4f46e5)',
-        tags: ['Longevity', 'Biomarkers'],
-    },
-    {
-        id: '3',
-        title: 'Performance Science: Evidence-Based Approach',
-        category: 'Performance',
-        level: 'Advanced',
-        status: 'Published' as const,
-        students: 643,
-        lessons: 32,
-        revenue: '£9,599',
-        lastUpdated: 'Feb 28, 2026',
-        coverColor: 'linear-gradient(135deg, #f59e0b, #d97706)',
-        tags: ['Performance', 'Evidence-Based'],
-    },
-    {
-        id: '4',
-        title: 'Advanced PCT Protocols',
-        category: 'Safety',
-        level: 'Advanced',
-        status: 'Draft' as const,
-        students: 0,
-        lessons: 8,
-        revenue: '£0',
-        lastUpdated: 'Mar 7, 2026',
-        coverColor: 'linear-gradient(135deg, #ec4899, #be185d)',
-        tags: ['PCT', 'Advanced'],
-    },
-    {
-        id: '5',
-        title: 'Blood Work Interpretation for Athletes',
-        category: 'Education',
-        level: 'Beginner',
-        status: 'Published' as const,
-        students: 2150,
-        lessons: 10,
-        revenue: '£5,355',
-        lastUpdated: 'Feb 20, 2026',
-        coverColor: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
-        tags: ['Blood Work', 'Education'],
-    },
-    {
-        id: '6',
-        title: 'Metabolic Health Deep Dive',
-        category: 'Longevity',
-        level: 'Intermediate',
-        status: 'Archived' as const,
-        students: 340,
-        lessons: 14,
-        revenue: '£2,720',
-        lastUpdated: 'Jan 15, 2026',
-        coverColor: 'linear-gradient(135deg, #14b8a6, #0d9488)',
-        tags: ['Metabolic', 'Health'],
-    },
-];
 
 const statusFilters: CourseStatus[] = ['All', 'Published', 'Draft', 'Archived'];
 
 export default function AdminCoursesPage() {
+    const [courses, setCourses] = useState<CourseRecord[]>([]);
     const [statusFilter, setStatusFilter] = useState<CourseStatus>('All');
     const [searchQuery, setSearchQuery] = useState('');
 
-    const filtered = mockCourses.filter((c) => {
+    useEffect(() => {
+        ensureDefaults();
+        setCourses(getCourses());
+    }, []);
+
+    const toggleArchive = useCallback((courseId: string) => {
+        const course = courses.find((c) => c.id === courseId);
+        if (!course) return;
+        const updated: CourseRecord = {
+            ...course,
+            status: course.status === 'Archived' ? 'Published' : 'Archived',
+        };
+        saveCourse(updated);
+        setCourses(getCourses());
+    }, [courses]);
+
+    const filtered = courses.filter((c) => {
         const matchesStatus = statusFilter === 'All' || c.status === statusFilter;
         const matchesSearch =
             c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -240,8 +177,12 @@ export default function AdminCoursesPage() {
                                             <button className={styles.actionBtn} title="Duplicate">
                                                 <Copy size={14} />
                                             </button>
-                                            <button className={styles.actionBtn} title="Archive">
-                                                <Archive size={14} />
+                                            <button
+                                                className={styles.actionBtn}
+                                                title={course.status === 'Archived' ? 'Unarchive' : 'Archive'}
+                                                onClick={() => toggleArchive(course.id)}
+                                            >
+                                                {course.status === 'Archived' ? <ArchiveRestore size={14} /> : <Archive size={14} />}
                                             </button>
                                         </div>
                                     </td>

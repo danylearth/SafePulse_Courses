@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './page.module.css';
 import { Search, Star, Users, Clock, BookOpen } from 'lucide-react';
+import { getCourses, ensureDefaults, type CourseRecord } from '@/lib/courseStore';
 
 const categories = [
     'All Courses',
@@ -15,142 +16,20 @@ const categories = [
     'Harm Reduction',
 ];
 
-const allCourses = [
-    {
-        id: '1',
-        title: 'PED Safety & Harm Reduction Fundamentals',
-        description: 'Comprehensive guide to understanding risks, safe practices, and monitoring protocols.',
-        level: 'Beginner',
-        category: 'Safety',
-        lessons: 24,
-        duration: '14 hours',
-        students: 1240,
-        rating: 4.9,
-        price: 89.99,
-        salePrice: null,
-        coverColor: 'linear-gradient(135deg, #00d4aa, #00a88a)',
-    },
-    {
-        id: '2',
-        title: 'Longevity Protocols: Biomarker Management',
-        description: 'Learn to monitor and protect key biomarkers across cycles for long-term health.',
-        level: 'Intermediate',
-        category: 'Longevity',
-        lessons: 18,
-        duration: '10 hours',
-        students: 856,
-        rating: 4.8,
-        price: 119.99,
-        salePrice: 79.99,
-        coverColor: 'linear-gradient(135deg, #6366f1, #4f46e5)',
-    },
-    {
-        id: '3',
-        title: 'Performance Science: Evidence-Based Approach',
-        description: 'Maximise results while minimising physiological stress through evidence-driven methods.',
-        level: 'Advanced',
-        category: 'Performance',
-        lessons: 32,
-        duration: '18 hours',
-        students: 643,
-        rating: 4.9,
-        price: 149.99,
-        salePrice: null,
-        coverColor: 'linear-gradient(135deg, #f59e0b, #d97706)',
-    },
-    {
-        id: '4',
-        title: 'Neurochemistry & Mood Management',
-        description: 'Managing mood, motivation, and neurochemistry during and after PED use.',
-        level: 'Intermediate',
-        category: 'Uplift',
-        lessons: 14,
-        duration: '8 hours',
-        students: 421,
-        rating: 4.7,
-        price: 79.99,
-        salePrice: null,
-        coverColor: 'linear-gradient(135deg, #ec4899, #be185d)',
-    },
-    {
-        id: '5',
-        title: 'Post-Cycle Recovery: Complete Guide',
-        description: 'Structured recovery frameworks covering PCT, hormonal restoration, and health monitoring.',
-        level: 'Beginner',
-        category: 'Safety',
-        lessons: 20,
-        duration: '12 hours',
-        students: 1890,
-        rating: 4.9,
-        price: 59.99,
-        salePrice: null,
-        coverColor: 'linear-gradient(135deg, #3b82f6, #2563eb)',
-    },
-    {
-        id: '6',
-        title: 'Advanced Dosing Logic & Interactions',
-        description: 'Deep dive into dosing frameworks, compound interactions, and risk stratification.',
-        level: 'Advanced',
-        category: 'Education',
-        lessons: 28,
-        duration: '16 hours',
-        students: 312,
-        rating: 4.8,
-        price: 129.99,
-        salePrice: 99.99,
-        coverColor: 'linear-gradient(135deg, #14b8a6, #0d9488)',
-    },
-    {
-        id: '7',
-        title: 'Blood Work Interpretation for Athletes',
-        description: 'How to read, understand, and act on your blood work results for optimal health.',
-        level: 'Beginner',
-        category: 'Education',
-        lessons: 10,
-        duration: '5 hours',
-        students: 2150,
-        rating: 5.0,
-        price: 39.99,
-        salePrice: null,
-        coverColor: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
-    },
-    {
-        id: '8',
-        title: 'Organ Protection During PED Use',
-        description: 'Evidence-based protocols for liver, kidney, and cardiovascular protection.',
-        level: 'Intermediate',
-        category: 'Harm Reduction',
-        lessons: 16,
-        duration: '9 hours',
-        students: 765,
-        rating: 4.9,
-        price: 99.99,
-        salePrice: null,
-        coverColor: 'linear-gradient(135deg, #f97316, #ea580c)',
-    },
-    {
-        id: 'athlete-code',
-        title: 'Enhanced Games Athlete Code',
-        description: 'The complete guide to performance protection, enhancing drug guidelines, and harm reduction for Enhanced Games athletes.',
-        level: 'Intermediate',
-        category: 'Education',
-        lessons: 50,
-        duration: '~25 hours',
-        students: 0,
-        rating: 0,
-        price: 0,
-        salePrice: null,
-        coverColor: 'linear-gradient(135deg, #f59e0b, #d97706)',
-    },
-];
-
 type SortOption = 'popular' | 'newest' | 'price-low' | 'price-high' | 'rating';
 
 export default function CoursesPage() {
+    const [allCourses, setAllCourses] = useState<CourseRecord[]>([]);
     const [activeCategory, setActiveCategory] = useState('All Courses');
     const [searchQuery, setSearchQuery] = useState('');
     const [sortBy, setSortBy] = useState<SortOption>('popular');
     const [selectedLevels, setSelectedLevels] = useState<string[]>(['Beginner', 'Intermediate', 'Advanced']);
+
+    useEffect(() => {
+        ensureDefaults();
+        // Only show published courses on the public site
+        setAllCourses(getCourses().filter((c) => c.status === 'Published'));
+    }, []);
 
     const toggleLevel = (level: string) => {
         setSelectedLevels((prev) =>
@@ -254,7 +133,13 @@ export default function CoursesPage() {
                                 href={`/courses/${course.id}`}
                                 className={`card card-hover card-interactive ${styles.courseCard}`}
                             >
-                                <div className={styles.cardCover} style={{ background: course.coverColor }}>
+                                <div
+                                    className={`${styles.cardCover} ${course.thumbnailUrl ? styles.cardCoverImage : ''}`}
+                                    style={course.thumbnailUrl
+                                        ? { backgroundImage: `url(${course.thumbnailUrl})` }
+                                        : { background: course.coverColor }
+                                    }
+                                >
                                     <span className={`badge badge-accent`}>{course.level}</span>
                                     <div className={styles.cardStats}>
                                         <span><Users size={12} /> {course.students}</span>

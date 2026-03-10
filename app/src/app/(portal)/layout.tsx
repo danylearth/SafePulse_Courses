@@ -8,6 +8,7 @@ import ThemeToggle from '@/components/ThemeToggle/ThemeToggle';
 import AccountSettingsModal from '@/components/AccountSettingsModal/AccountSettingsModal';
 import NotificationPanel from '@/components/NotificationPanel/NotificationPanel';
 import AuthGuard from '@/components/AuthGuard/AuthGuard';
+import { useAuth } from '@/lib/authContext';
 import styles from './layout.module.css';
 import { Search, Bell, BookOpen } from 'lucide-react';
 
@@ -29,7 +30,12 @@ export default function PortalLayout({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
+    const { user } = useAuth();
     const isLearnPage = pathname?.includes('/learn');
+
+    const initials = user?.name
+        ? user.name.split(' ').map((w) => w[0]).join('').toUpperCase().slice(0, 2)
+        : '?';
 
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -154,7 +160,7 @@ export default function PortalLayout({
                                 style={{ cursor: 'pointer' }}
                                 onClick={() => setIsSettingsOpen(true)}
                                 title="Account settings"
-                            >SP</div>
+                            >{initials}</div>
                         </div>
                     </header>
                     <main className={styles.content}>

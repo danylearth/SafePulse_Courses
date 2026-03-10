@@ -1,5 +1,5 @@
 export const content = `
-Most of what we “know” about PES comes from studies of very heavy users, typically bodybuilders or weightlifters running supraphysiological, multi-drug (“stacked”) cycles, often with underground products. Those samples are important, but they don’t represent everyone who ever uses PES for performance . This guide explains what the evidence *clearly* shows and is solid proof,  where it’s weaker, and how to communicate risk without over- or under-stating it.**The evidence base is skewed****,****here’s how****:**
+Most of what we “know” about PES comes from studies of very heavy users, typically bodybuilders or weightlifters running supraphysiological, multi-drug (“stacked”) cycles, often with underground products. Those samples are important, but they don’t represent everyone who ever uses PES for performance . This guide explains what the evidence *clearly* shows and is solid proof,  where it’s weaker, and how to communicate risk without over- or under-stating it. **The evidence base is skewed, here’s how:**
 
 - **Who gets studied:** Clinical case series, forensic reports, anti-doping registries, and custodial settings, over-representing severe cases and long-term, high-dose, polypharmacy users (Hoffman & Ratamess, 2006; Sagoe et al., 2014).
 - **Who is under-represented:**

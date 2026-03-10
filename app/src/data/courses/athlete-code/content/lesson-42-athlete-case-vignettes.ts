@@ -118,7 +118,7 @@ The cycle was dropped after the competition , 4 weeks later all markers were nor
 
 8 weeks later all markers are normal. Bodyweight 11 percent again.
 
-**Case 3-****Lisa L - Bodyweight 67kg , bodyfat 14 percent. Competitive BJJ**
+**Case 3 - Lisa L - Bodyweight 67kg, bodyfat 14 percent. Competitive BJJ**
 
 **Physically very strong, very disciplined , excellent diet, high level competitor, International level**
 

@@ -1,15 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/lib/authContext';
 import styles from './Sidebar.module.css';
-import { useTheme } from '@/components/ThemeProvider/ThemeProvider';
 import {
     LayoutDashboard,
     BookOpen,
-    Search,
+    Library,
     Settings,
     HelpCircle,
     ChevronLeft,
@@ -20,7 +19,7 @@ import {
 
 const studentLinks = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/courses', label: 'Courses', icon: Search },
+    { href: '/courses', label: 'Courses', icon: Library },
     { href: '/my-courses', label: 'My Courses', icon: BookOpen },
 ];
 
@@ -41,29 +40,23 @@ interface SidebarProps {
 
 export default function Sidebar({ isAdmin = false, onOpenSettings, collapsed = false, onToggleCollapse }: SidebarProps) {
     const pathname = usePathname();
-    const { theme } = useTheme();
+    const { user } = useAuth();
     const links = isAdmin ? adminLinks : studentLinks;
-
-    // Check both the React theme state AND the actual DOM attribute
-    // to avoid the flash issue where theme starts as 'light' before localStorage loads
-    const [isDark, setIsDark] = useState(true); // default dark to match the app's primary theme
-
-    useEffect(() => {
-        const attr = document.documentElement.getAttribute('data-theme');
-        setIsDark(attr === 'dark');
-    }, [theme]);
-
-    const fullLogo = isDark ? '/logo-full.png' : '/logo-full-dark.png';
-    const iconLogo = isDark ? '/logo-icon.png' : '/logo-icon-dark.png';
 
     return (
         <aside className={`${styles.sidebar} ${collapsed ? styles.collapsed : ''}`}>
             <div className={styles.header}>
                 <Link href={isAdmin ? '/admin' : '/dashboard'} className={styles.logo}>
                     {collapsed ? (
-                        <Image src={iconLogo} alt="SafePulse" width={32} height={32} className={styles.logoImg} />
+                        <>
+                            <Image src="/logo-icon.png" alt="SafePulse" width={32} height={32} className={`${styles.logoImg} ${styles.logoDark}`} />
+                            <Image src="/logo-icon-dark.png" alt="SafePulse" width={32} height={32} className={`${styles.logoImg} ${styles.logoLight}`} />
+                        </>
                     ) : (
-                        <Image src={fullLogo} alt="SafePulse Academy" width={140} height={32} className={styles.logoImg} />
+                        <>
+                            <Image src="/logo-full.png" alt="SafePulse Academy" width={140} height={32} className={`${styles.logoImg} ${styles.logoDark}`} />
+                            <Image src="/logo-full-dark.png" alt="SafePulse Academy" width={140} height={32} className={`${styles.logoImg} ${styles.logoLight}`} />
+                        </>
                     )}
                 </Link>
                 <button
@@ -104,10 +97,10 @@ export default function Sidebar({ isAdmin = false, onOpenSettings, collapsed = f
                     <Settings size={20} />
                     {!collapsed && <span>Settings</span>}
                 </button>
-                {!collapsed && (
+                {!collapsed && user?.name && (
                     <div className={styles.userInfo}>
                         <div className={styles.userMeta}>
-                            <span className={styles.userName}>Dan Sherwood</span>
+                            <span className={styles.userName}>{user.name}</span>
                         </div>
                     </div>
                 )}

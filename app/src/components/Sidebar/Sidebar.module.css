@@ -39,6 +39,23 @@
     width: auto;
 }
 
+/* Show correct logo variant based on theme without React state flash */
+.logoDark {
+    display: none;
+}
+
+.logoLight {
+    display: block;
+}
+
+:global([data-theme="dark"]) .logoDark {
+    display: block;
+}
+
+:global([data-theme="dark"]) .logoLight {
+    display: none;
+}
+
 .toggle {
     width: 28px;
     height: 28px;
