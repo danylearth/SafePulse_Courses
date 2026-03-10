@@ -57,6 +57,80 @@ const defaultCourses: CourseRecord[] = [
         status: 'Published',
         lastUpdated: 'Mar 5, 2026',
         revenue: '£14,039',
+        sections: [
+            {
+                id: 'week-1',
+                title: 'Week 1 - Introduction to PED Safety',
+                lessons: [
+                    { id: 'l1', title: 'Welcome & Course Overview', type: 'video', duration: '12min' },
+                    { id: 'l2', title: 'Understanding the PED Landscape', type: 'article', duration: '25min' },
+                    { id: 'l3', title: 'Risk vs. Reward: A Framework', type: 'video', duration: '45min' },
+                    { id: 'l4', title: 'Module 1 Quiz', type: 'quiz', duration: '10min' },
+                ],
+            },
+            {
+                id: 'week-2',
+                title: 'Week 2 - Pharmacology Basics',
+                lessons: [
+                    { id: 'l5', title: 'How Compounds Work in the Body', type: 'video', duration: '1h 10min' },
+                    { id: 'l6', title: 'Anabolic vs. Androgenic Effects', type: 'article', duration: '30min' },
+                    { id: 'l7', title: 'Half-Lives and Dosing Windows', type: 'video', duration: '38min' },
+                ],
+            },
+            {
+                id: 'week-3',
+                title: 'Week 3 - Monitoring & Blood Work',
+                lessons: [
+                    { id: 'l8', title: 'Essential Blood Markers to Track', type: 'video', duration: '55min' },
+                    { id: 'l9', title: 'Reading Your Results', type: 'article', duration: '20min' },
+                    { id: 'l10', title: 'When to Seek Medical Attention', type: 'video', duration: '32min' },
+                    { id: 'l11', title: 'Case Study: Real-World Examples', type: 'article', duration: '40min' },
+                ],
+            },
+            {
+                id: 'week-4',
+                title: 'Week 4 - Organ Protection Protocols',
+                lessons: [
+                    { id: 'l12', title: 'Liver Protection Strategies', type: 'video', duration: '48min' },
+                    { id: 'l13', title: 'Cardiovascular Risk Management', type: 'video', duration: '52min' },
+                    { id: 'l14', title: 'Kidney Health Maintenance', type: 'article', duration: '25min' },
+                ],
+            },
+            {
+                id: 'week-5',
+                title: 'Week 5 - Post-Cycle Therapy',
+                lessons: [
+                    { id: 'l15', title: 'PCT Fundamentals', type: 'video', duration: '1h 5min' },
+                    { id: 'l16', title: 'Hormonal Recovery Timeline', type: 'article', duration: '30min' },
+                    { id: 'l17', title: 'Common PCT Mistakes', type: 'video', duration: '35min' },
+                ],
+            },
+            {
+                id: 'week-6',
+                title: 'Week 6 - Advanced Risk Management',
+                lessons: [
+                    { id: 'l18', title: 'Compound Interaction Analysis', type: 'video', duration: '42min' },
+                    { id: 'l19', title: 'Individualizing Your Protocol', type: 'article', duration: '28min' },
+                    { id: 'l20', title: 'Red Flags & When to Stop', type: 'video', duration: '35min' },
+                ],
+            },
+            {
+                id: 'week-7',
+                title: 'Week 7 - Long-Term Health Strategies',
+                lessons: [
+                    { id: 'l21', title: 'Longevity Considerations', type: 'video', duration: '50min' },
+                    { id: 'l22', title: 'Building Sustainable Protocols', type: 'article', duration: '30min' },
+                ],
+            },
+            {
+                id: 'week-8',
+                title: 'Week 8 - Final Assessment',
+                lessons: [
+                    { id: 'l23', title: 'Course Review & Key Takeaways', type: 'video', duration: '40min' },
+                    { id: 'l24', title: 'Final Exam', type: 'quiz', duration: '30min' },
+                ],
+            },
+        ],
     },
     {
         id: '2',
@@ -258,6 +332,24 @@ export function deleteCourse(id: string): void {
 
 export function generateId(): string {
     return `course_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+}
+
+export function duplicateCourse(id: string): CourseRecord | null {
+    const course = getCourseById(id);
+    if (!course) return null;
+
+    const duplicated: CourseRecord = {
+        ...course,
+        id: generateId(),
+        title: `${course.title} (Copy)`,
+        students: 0,
+        revenue: '£0',
+        status: 'Draft',
+        lastUpdated: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+    };
+
+    saveCourse(duplicated);
+    return duplicated;
 }
 
 /** Seed localStorage with defaults if empty, and merge new courses on version bump */

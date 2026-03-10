@@ -1,8 +1,10 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from './page.module.css';
+import { getCourseById, saveCourse, generateId, type CourseRecord } from '@/lib/courseStore';
 import {
     ChevronLeft,
     ChevronRight,
@@ -123,9 +125,41 @@ const steps = ['Course Details', 'Curriculum', 'Quizzes', 'Review'];
 
 /* ───────────── Component ───────────── */
 export default function NewCoursePage() {
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const editId = searchParams?.get('edit');
+    const isEditing = Boolean(editId);
+
     const [currentStep, setCurrentStep] = useState(0);
     const [course, setCourse] = useState<CourseData>({ ...defaultCourse });
+    const [courseId, setCourseId] = useState<string | null>(editId);
     const [tagInput, setTagInput] = useState('');
+
+    // Load existing course if editing
+    useEffect(() => {
+        if (editId) {
+            const existing = getCourseById(editId);
+            if (existing) {
+                setCourseId(editId);
+                setCourse({
+                    title: existing.title,
+                    shortDescription: existing.description,
+                    longDescription: existing.longDescription || '',
+                    category: existing.category,
+                    level: existing.level as 'Beginner' | 'Intermediate' | 'Advanced',
+                    price: existing.price.toString(),
+                    salePrice: existing.salePrice?.toString() || '',
+                    coverColor: existing.coverColor,
+                    thumbnailUrl: existing.thumbnailUrl || null,
+                    tags: existing.tags,
+                    includes: existing.includes || [],
+                    status: existing.status,
+                    sections: existing.sections || defaultCourse.sections,
+                    quizQuestions: [],
+                });
+            }
+        }
+    }, [editId]);
 
     // AI Chat
     const [chatOpen, setChatOpen] = useState(false);
@@ -478,6 +512,49 @@ export default function NewCoursePage() {
 
     const totalLessons = course.sections.reduce((sum, s) => sum + s.lessons.length, 0);
 
+    /* ───── Save / Publish ───── */
+    const handleSave = useCallback((publish: boolean = false) => {
+        const id = courseId || generateId();
+
+        const courseRecord: CourseRecord = {
+            id,
+            title: course.title,
+            description: course.shortDescription,
+            longDescription: course.longDescription,
+            level: course.level as 'Beginner' | 'Intermediate' | 'Advanced',
+            category: course.category,
+            lessons: totalLessons,
+            duration: course.sections.reduce((total, s) => {
+                const mins = s.lessons.reduce((sum, l) => {
+                    const match = l.duration.match(/(\d+)/);
+                    return sum + (match ? parseInt(match[1]) : 0);
+                }, 0);
+                return total + mins;
+            }, 0) + ' min',
+            students: 0,
+            rating: 0,
+            price: parseFloat(course.price) || 0,
+            salePrice: course.salePrice ? parseFloat(course.salePrice) : null,
+            coverColor: course.coverColor,
+            thumbnailUrl: course.thumbnailUrl,
+            tags: course.tags,
+            includes: course.includes,
+            status: publish ? 'Published' : course.status,
+            sections: course.sections,
+            lastUpdated: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+            revenue: '£0',
+        };
+
+        saveCourse(courseRecord);
+
+        if (!courseId) {
+            setCourseId(id);
+        }
+
+        // Redirect back to courses list
+        router.push('/admin/courses');
+    }, [course, courseId, totalLessons, router]);
+
     /* ───── Render helpers ───── */
     const lessonIcon = (type: string) => {
         switch (type) {
@@ -509,7 +586,7 @@ export default function NewCoursePage() {
             <div className={styles.breadcrumb}>
                 <Link href="/admin/courses">Courses</Link>
                 <span>/</span>
-                <span>New Course</span>
+                <span>{isEditing ? 'Edit Course' : 'New Course'}</span>
             </div>
 
             {/* Step Tabs */}
@@ -1061,7 +1138,9 @@ export default function NewCoursePage() {
                     )}
                 </div>
                 <div className={styles.footerRight}>
-                    <button className="btn btn-secondary">Save as Draft</button>
+                    <button className="btn btn-secondary" onClick={() => handleSave(false)}>
+                        Save as Draft
+                    </button>
                     {currentStep < steps.length - 1 ? (
                         <button className="btn btn-primary" onClick={() => setCurrentStep(currentStep + 1)}>
                             Continue <ChevronRight size={16} />
@@ -1069,12 +1148,9 @@ export default function NewCoursePage() {
                     ) : (
                         <button
                             className="btn btn-primary"
-                            onClick={() => {
-                                updateField('status', 'Published');
-                                alert('Course published! (In production this would save to Supabase)');
-                            }}
+                            onClick={() => handleSave(true)}
                         >
-                            Publish Course
+                            {isEditing ? 'Update & Publish' : 'Publish Course'}
                         </button>
                     )}
                 </div>

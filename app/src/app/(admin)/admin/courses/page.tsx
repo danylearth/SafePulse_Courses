@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import styles from './page.module.css';
 import { Plus, Search, Edit3, Copy, Archive, ArchiveRestore, BookOpen, Users, Clock } from 'lucide-react';
-import { getCourses, saveCourse, ensureDefaults, type CourseRecord } from '@/lib/courseStore';
+import { getCourses, saveCourse, duplicateCourse, ensureDefaults, type CourseRecord } from '@/lib/courseStore';
 
 type CourseStatus = 'All' | 'Published' | 'Draft' | 'Archived';
 
@@ -21,15 +21,27 @@ export default function AdminCoursesPage() {
     }, []);
 
     const toggleArchive = useCallback((courseId: string) => {
-        const course = courses.find((c) => c.id === courseId);
+        const currentCourses = getCourses();
+        const course = currentCourses.find((c) => c.id === courseId);
         if (!course) return;
+
         const updated: CourseRecord = {
             ...course,
             status: course.status === 'Archived' ? 'Published' : 'Archived',
+            lastUpdated: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
         };
+
         saveCourse(updated);
         setCourses(getCourses());
-    }, [courses]);
+    }, []);
+
+    const handleDuplicate = useCallback((courseId: string) => {
+        const duplicated = duplicateCourse(courseId);
+        if (duplicated) {
+            setCourses(getCourses());
+            // Optionally show a success message or redirect to edit the duplicated course
+        }
+    }, []);
 
     const filtered = courses.filter((c) => {
         const matchesStatus = statusFilter === 'All' || c.status === statusFilter;
@@ -174,7 +186,11 @@ export default function AdminCoursesPage() {
                                             >
                                                 <Edit3 size={14} />
                                             </Link>
-                                            <button className={styles.actionBtn} title="Duplicate">
+                                            <button
+                                                className={styles.actionBtn}
+                                                title="Duplicate"
+                                                onClick={() => handleDuplicate(course.id)}
+                                            >
                                                 <Copy size={14} />
                                             </button>
                                             <button
