@@ -18,9 +18,7 @@ import {
 } from 'lucide-react';
 
 const studentLinks = [
-    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/courses', label: 'Courses', icon: Library },
-    { href: '/my-courses', label: 'My Courses', icon: BookOpen },
+    { href: '/courses/athlete-code', label: 'Courses', icon: Library },
 ];
 
 const adminLinks = [
@@ -46,7 +44,7 @@ export default function Sidebar({ isAdmin = false, onOpenSettings, collapsed = f
     return (
         <aside className={`${styles.sidebar} ${collapsed ? styles.collapsed : ''}`}>
             <div className={styles.header}>
-                <Link href={isAdmin ? '/admin' : '/dashboard'} className={styles.logo}>
+                <Link href={isAdmin ? '/admin' : '/courses/athlete-code'} className={styles.logo}>
                     {collapsed ? (
                         <>
                             <Image src="/logo-icon.png" alt="SafePulse" width={32} height={32} className={`${styles.logoImg} ${styles.logoDark}`} />
