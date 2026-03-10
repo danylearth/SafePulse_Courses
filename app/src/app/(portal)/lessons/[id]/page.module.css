@@ -1,0 +1,377 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+    animation: fadeIn 0.4s ease-out;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+}
+
+.breadcrumb a {
+    color: var(--text-secondary);
+}
+
+.breadcrumb a:hover {
+    color: var(--accent);
+}
+
+.layout {
+    display: flex;
+    gap: var(--space-xl);
+}
+
+.mainContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xl);
+}
+
+/* Hero */
+.hero {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.ratingRow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.rating {
+    font-weight: 700;
+    color: var(--warning);
+}
+
+.hero h1 {
+    font-size: 1.75rem;
+}
+
+.hero p {
+    white-space: pre-line;
+    line-height: 1.7;
+}
+
+.metaRow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xl);
+}
+
+.authorBadge {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.metaRow span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Content Section */
+.contentSection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.contentHeader h2 {
+    margin-bottom: var(--space-sm);
+}
+
+.contentStats {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+}
+
+.contentStats span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.expandBtn {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+.expandBtn:hover {
+    text-decoration: underline;
+}
+
+.sectionsList {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.sectionItem {
+    border-bottom: 1px solid var(--border);
+}
+
+.sectionItem:last-child {
+    border-bottom: none;
+}
+
+.sectionToggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: var(--bg-tertiary);
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: background var(--transition-fast);
+}
+
+.sectionToggle:hover {
+    background: var(--bg-surface);
+}
+
+.sectionLeft {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.lessonsList {
+    display: flex;
+    flex-direction: column;
+}
+
+.lessonItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px 12px 44px;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    transition: background var(--transition-fast);
+}
+
+.lessonItem:hover {
+    background: var(--bg-card-hover);
+}
+
+.lessonLeft {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.lessonLeft svg {
+    color: var(--text-tertiary);
+}
+
+/* Sidebar */
+.sidebar {
+    width: 340px;
+    flex-shrink: 0;
+}
+
+.buyCard {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-lg));
+    padding: 0;
+    overflow: hidden;
+}
+
+.buyCover {
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.playOverlay {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: transform var(--transition-fast);
+}
+
+.playOverlay:hover {
+    transform: scale(1.1);
+}
+
+/* Enrolled progress overlay on cover */
+.coverProgress {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(6px);
+    border-radius: var(--radius-lg);
+    padding: 16px 28px;
+}
+
+.coverProgressPct {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1;
+}
+
+.coverProgressLabel {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* Progress section */
+.progressSection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.progressHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Current lesson indicator */
+.currentLesson {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--bg-surface);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+}
+
+.currentLessonInfo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.currentLessonDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    box-shadow: 0 0 6px var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        box-shadow: 0 0 6px var(--accent);
+    }
+
+    50% {
+        opacity: 0.6;
+        box-shadow: 0 0 12px var(--accent);
+    }
+}
+
+.buyBody {
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.priceRow {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+}
+
+.price {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.salePrice {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent);
+}
+
+.originalPrice {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    text-decoration: line-through;
+}
+
+.includesList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border);
+}
+
+.includesList h5 {
+    margin-bottom: var(--space-xs);
+}
+
+.includeItem {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--text-secondary);
+}
+
+.includeItem svg {
+    color: var(--text-tertiary);
+}
+
+@media (max-width: 1024px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .buyCard {
+        position: static;
+    }
+}

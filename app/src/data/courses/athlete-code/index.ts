@@ -1,9 +1,10 @@
 export interface AthleteCodeLesson {
   id: string;
   title: string;
-  type: 'article';
+  type: 'article' | 'quiz';
   duration: string;
-  contentImport: () => Promise<{ content: string }>;
+  contentImport?: () => Promise<{ content: string }>;
+  quizImport?: () => Promise<{ quizData: any[] }>;
 }
 
 export interface AthleteCodeCourse {
@@ -88,14 +89,14 @@ export const athleteCodeCourse: AthleteCodeCourse = {
       id: 'ac-l7',
       title: 'Medical Use and Regulatory History of PESs',
       type: 'article',
-      duration: estimateReadTime(1277),
+      duration: estimateReadTime(1383),
       contentImport: () => import('./content/lesson-07-medical-use-and-regulatory-history-of-pess'),
     },
     {
       id: 'ac-l8',
       title: 'Risk vs Reward',
       type: 'article',
-      duration: estimateReadTime(1592),
+      duration: estimateReadTime(1721),
       contentImport: () => import('./content/lesson-08-risk-vs-reward'),
     },
     {
@@ -128,21 +129,21 @@ export const athleteCodeCourse: AthleteCodeCourse = {
     },
     {
       id: 'ac-l13',
-      title: 'Strength & Power Diagnostics',
+      title: 'Strength Power Diagnostics',
       type: 'article',
       duration: estimateReadTime(124),
       contentImport: () => import('./content/lesson-13-strength-power-diagnostics'),
     },
     {
       id: 'ac-l14',
-      title: 'Quality of Life & Wellbeing',
+      title: 'Quality of Life Wellbeing',
       type: 'article',
       duration: estimateReadTime(84),
       contentImport: () => import('./content/lesson-14-quality-of-life-wellbeing'),
     },
     {
       id: 'ac-l15',
-      title: 'Gene Expression Testing (Transcriptomics)',
+      title: 'Gene Expression Testing Transcriptomics',
       type: 'article',
       duration: estimateReadTime(96),
       contentImport: () => import('./content/lesson-15-gene-expression-testing-transcriptomics'),
@@ -170,7 +171,7 @@ export const athleteCodeCourse: AthleteCodeCourse = {
     },
     {
       id: 'ac-l19',
-      title: 'Myths About Performance-Enhancing Substances',
+      title: 'Myths About Performance Enhancing Substances',
       type: 'article',
       duration: estimateReadTime(1542),
       contentImport: () => import('./content/lesson-19-myths-about-performance-enhancing-substances'),
@@ -179,19 +180,19 @@ export const athleteCodeCourse: AthleteCodeCourse = {
       id: 'ac-l20',
       title: 'Reappraising PES Harms and Risks',
       type: 'article',
-      duration: estimateReadTime(456),
+      duration: estimateReadTime(458),
       contentImport: () => import('./content/lesson-20-reappraising-pes-harms-and-risks'),
     },
     {
       id: 'ac-l21',
       title: 'Comparison of IM vs SubQ Administration',
       type: 'article',
-      duration: estimateReadTime(593),
+      duration: estimateReadTime(623),
       contentImport: () => import('./content/lesson-21-comparison-of-im-vs-subq-administration'),
     },
     {
       id: 'ac-l22',
-      title: 'Post-Injection Guidance for Elite Athletes',
+      title: 'Post Injection Guidance for Elite Athletes',
       type: 'article',
       duration: estimateReadTime(308),
       contentImport: () => import('./content/lesson-22-post-injection-guidance-for-elite-athletes'),
@@ -200,89 +201,89 @@ export const athleteCodeCourse: AthleteCodeCourse = {
       id: 'ac-l23',
       title: 'PES Approved for Use by Enhanced Games',
       type: 'article',
-      duration: estimateReadTime(4231),
+      duration: estimateReadTime(4242),
       contentImport: () => import('./content/lesson-23-pes-approved-for-use-by-enhanced-games'),
     },
     {
       id: 'ac-l24',
       title: 'Responsibility of the Athlete',
       type: 'article',
-      duration: estimateReadTime(478),
+      duration: estimateReadTime(514),
       contentImport: () => import('./content/lesson-24-responsibility-of-the-athlete'),
     },
     {
       id: 'ac-l25',
       title: 'Proposed Athlete Enhancement Protocols',
       type: 'article',
-      duration: estimateReadTime(1092),
+      duration: estimateReadTime(1125),
       contentImport: () => import('./content/lesson-25-proposed-athlete-enhancement-protocols'),
     },
     {
       id: 'ac-l26',
-      title: 'Cluster 1: AAS - Weightlifting / Throwing / Power Sports',
+      title: 'Cluster 1 AAS Weightlifting Throwing Power Sports',
       type: 'article',
-      duration: estimateReadTime(81),
+      duration: estimateReadTime(107),
       contentImport: () => import('./content/lesson-26-cluster-1-aas-weightlifting-throwing-power-sports'),
     },
     {
       id: 'ac-l27',
-      title: 'Cluster 2: AAS - Sprint / Middle-distance / Field Events',
+      title: 'Cluster 2 AAS Sprint Middle Distance Field Events',
       type: 'article',
-      duration: estimateReadTime(63),
+      duration: estimateReadTime(84),
       contentImport: () => import('./content/lesson-27-cluster-2-aas-sprint-middle-distance-field-events'),
     },
     {
       id: 'ac-l28',
-      title: 'Cluster 3: EPO & Blood-Doping - Endurance Sports',
+      title: 'Cluster 3 EPO Blood Doping Endurance Sports',
       type: 'article',
-      duration: estimateReadTime(80),
+      duration: estimateReadTime(101),
       contentImport: () => import('./content/lesson-28-cluster-3-epo-blood-doping-endurance-sports'),
     },
     {
       id: 'ac-l29',
-      title: 'Cluster 4: Metabolic Modulators',
+      title: 'Cluster 4 Metabolic Modulators',
       type: 'article',
-      duration: estimateReadTime(66),
+      duration: estimateReadTime(87),
       contentImport: () => import('./content/lesson-29-cluster-4-metabolic-modulators'),
     },
     {
       id: 'ac-l30',
-      title: 'Cluster 5: Stimulants - Sprint / Combat / Team Sports',
+      title: 'Cluster 5 Stimulants Sprint Combat Team Sports',
       type: 'article',
-      duration: estimateReadTime(130),
+      duration: estimateReadTime(162),
       contentImport: () => import('./content/lesson-30-cluster-5-stimulants-sprint-combat-team-sports'),
     },
     {
       id: 'ac-l31',
-      title: 'Cluster 7: Beta-Blockers - Precision / Calmness Sports',
+      title: 'Cluster 7 Beta Blockers Precision Calmness Sports',
       type: 'article',
-      duration: estimateReadTime(47),
+      duration: estimateReadTime(58),
       contentImport: () => import('./content/lesson-31-cluster-7-beta-blockers-precision-calmness-sports'),
     },
     {
       id: 'ac-l32',
-      title: 'Cluster 8: Historical / Systematic Doping Programs',
+      title: 'Cluster 8 Historical Systematic Doping Programs',
       type: 'article',
-      duration: estimateReadTime(171),
+      duration: estimateReadTime(192),
       contentImport: () => import('./content/lesson-32-cluster-8-historical-systematic-doping-programs'),
     },
     {
       id: 'ac-l33',
-      title: 'Athlete Assessment, Health Optimisation, and Intervention Pathway',
+      title: 'Athlete Assessment Health Optimisation and Intervention Path',
       type: 'article',
       duration: estimateReadTime(644),
       contentImport: () => import('./content/lesson-33-athlete-assessment-health-optimisation-and-intervention-path'),
     },
     {
       id: 'ac-l34',
-      title: 'Parallels and Distinctions: HRT vs PES in Women',
+      title: 'Parallels and Distinctions HRT vs PES in Women',
       type: 'article',
       duration: estimateReadTime(191),
       contentImport: () => import('./content/lesson-34-parallels-and-distinctions-hrt-vs-pes-in-women'),
     },
     {
       id: 'ac-l35',
-      title: 'Risks, Evidence Gaps, and Harm-Minimisation Priorities',
+      title: 'Risks Evidence Gaps and Harm Minimisation Priorities',
       type: 'article',
       duration: estimateReadTime(295),
       contentImport: () => import('./content/lesson-35-risks-evidence-gaps-and-harm-minimisation-priorities'),
@@ -310,7 +311,7 @@ export const athleteCodeCourse: AthleteCodeCourse = {
     },
     {
       id: 'ac-l39',
-      title: 'Definitions of Menopause, Perimenopause, and Postmenopause',
+      title: 'Definitions of Menopause Perimenopause and Postmenopause',
       type: 'article',
       duration: estimateReadTime(106),
       contentImport: () => import('./content/lesson-39-definitions-of-menopause-perimenopause-and-postmenopause'),
@@ -326,14 +327,14 @@ export const athleteCodeCourse: AthleteCodeCourse = {
       id: 'ac-l41',
       title: 'Interaction Considerations in Enhanced Environments',
       type: 'article',
-      duration: estimateReadTime(1404),
+      duration: estimateReadTime(1303),
       contentImport: () => import('./content/lesson-41-interaction-considerations-in-enhanced-environments'),
     },
     {
       id: 'ac-l42',
       title: 'Athlete Case Vignettes',
       type: 'article',
-      duration: estimateReadTime(1437),
+      duration: estimateReadTime(1433),
       contentImport: () => import('./content/lesson-42-athlete-case-vignettes'),
     },
     {
@@ -352,7 +353,7 @@ export const athleteCodeCourse: AthleteCodeCourse = {
     },
     {
       id: 'ac-l45',
-      title: 'Medical Supervision including Emergency Response',
+      title: 'Medical Supervision Including Emergency Response',
       type: 'article',
       duration: estimateReadTime(916),
       contentImport: () => import('./content/lesson-45-medical-supervision-including-emergency-response'),
@@ -361,7 +362,7 @@ export const athleteCodeCourse: AthleteCodeCourse = {
       id: 'ac-l46',
       title: 'Practical Health Risk Reduction',
       type: 'article',
-      duration: estimateReadTime(70),
+      duration: estimateReadTime(69),
       contentImport: () => import('./content/lesson-46-practical-health-risk-reduction'),
     },
     {
@@ -373,9 +374,9 @@ export const athleteCodeCourse: AthleteCodeCourse = {
     },
     {
       id: 'ac-l48',
-      title: 'Male - Frequently Asked Questions',
+      title: 'Male Frequently Asked Questions',
       type: 'article',
-      duration: estimateReadTime(867),
+      duration: estimateReadTime(966),
       contentImport: () => import('./content/lesson-48-male-frequently-asked-questions'),
     },
     {
@@ -387,7 +388,7 @@ export const athleteCodeCourse: AthleteCodeCourse = {
     },
     {
       id: 'ac-l50',
-      title: 'What to do if?',
+      title: 'What to Do If',
       type: 'article',
       duration: estimateReadTime(3881),
       contentImport: () => import('./content/lesson-50-what-to-do-if'),

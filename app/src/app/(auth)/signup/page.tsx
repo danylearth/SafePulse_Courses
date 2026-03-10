@@ -23,7 +23,6 @@ const STEPS = [
     { id: 1, label: 'Account', icon: User },
     { id: 2, label: 'Address', icon: MapPin },
     { id: 3, label: 'Profession', icon: Briefcase },
-    { id: 4, label: 'Payment', icon: CreditCard },
 ];
 
 function SignupInner() {
@@ -55,12 +54,6 @@ function SignupInner() {
     // Step 3 — Profession
     const [professions, setProfessions] = useState<string[]>([]);
 
-    // Step 4 — Payment
-    const [cardNumber, setCardNumber] = useState('');
-    const [expiry, setExpiry] = useState('');
-    const [cvv, setCvv] = useState('');
-    const [cardName, setCardName] = useState('');
-
     // --- Validation ---
     const validateStep1 = () => {
         if (!firstName.trim() || !lastName.trim()) return 'Please enter your full name.';
@@ -78,14 +71,6 @@ function SignupInner() {
         setStep(2);
     };
 
-    // --- Card formatting ---
-    const formatCard = (val: string) =>
-        val.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim();
-    const formatExpiry = (val: string) => {
-        const digits = val.replace(/\D/g, '').slice(0, 4);
-        return digits.length > 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits;
-    };
-
     // --- Finish ---
     const finish = useCallback(() => {
         login({
@@ -94,10 +79,10 @@ function SignupInner() {
             username: username.trim(),
             address: { street, city, state, postcode, country },
             professions,
-            hasPayment: !!cardNumber.trim(),
+            hasPayment: false,
         });
         router.push(decodeURIComponent(redirectTo));
-    }, [login, firstName, lastName, email, username, street, city, state, postcode, country, professions, cardNumber, router, redirectTo]);
+    }, [login, firstName, lastName, email, username, street, city, state, postcode, country, professions, router, redirectTo]);
 
     const toggleProfession = (p: string) => {
         setProfessions((prev) =>
@@ -271,60 +256,7 @@ function SignupInner() {
                             <ChevronLeft size={16} /> Back
                         </button>
                         <div className={styles.rowBtns}>
-                            <button className={styles.btnSecondary} onClick={() => setStep(4)}>Skip</button>
-                            <button className={styles.btnPrimary} onClick={() => setStep(4)}>
-                                Continue <ChevronRight size={16} />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* ── Step 4: Payment ── */}
-            {step === 4 && (
-                <div className={styles.stepBody}>
-                    <div className={styles.heading}>
-                        <h1>Payment method</h1>
-                        <p>Add a card to purchase courses instantly. You can always do this later.</p>
-                    </div>
-
-                    {/* Visual card preview */}
-                    <div className={styles.cardPreview}>
-                        <div className={styles.cardChip} />
-                        <div className={styles.cardNumber}>{cardNumber || '•••• •••• •••• ••••'}</div>
-                        <div className={styles.cardMeta}>
-                            <span>{cardName || 'YOUR NAME'}</span>
-                            <span>{expiry || 'MM/YY'}</span>
-                        </div>
-                    </div>
-
-                    <div className={styles.field}>
-                        <label>Name on Card</label>
-                        <input className={styles.input} type="text" placeholder="Jane Smith" value={cardName} onChange={(e) => setCardName(e.target.value)} />
-                    </div>
-
-                    <div className={styles.field}>
-                        <label>Card Number</label>
-                        <input className={styles.input} type="text" inputMode="numeric" placeholder="1234 5678 9012 3456" value={cardNumber} onChange={(e) => setCardNumber(formatCard(e.target.value))} maxLength={19} />
-                    </div>
-
-                    <div className={styles.row2}>
-                        <div className={styles.field}>
-                            <label>Expiry</label>
-                            <input className={styles.input} type="text" inputMode="numeric" placeholder="MM/YY" value={expiry} onChange={(e) => setExpiry(formatExpiry(e.target.value))} maxLength={5} />
-                        </div>
-                        <div className={styles.field}>
-                            <label>CVV</label>
-                            <input className={styles.input} type="password" inputMode="numeric" placeholder="•••" value={cvv} onChange={(e) => setCvv(e.target.value.replace(/\D/g, '').slice(0, 4))} maxLength={4} />
-                        </div>
-                    </div>
-
-                    <div className={styles.navRow}>
-                        <button className={styles.btnGhost} onClick={() => setStep(3)}>
-                            <ChevronLeft size={16} /> Back
-                        </button>
-                        <div className={styles.rowBtns}>
-                            <button className={styles.btnSecondary} onClick={finish}>Skip for now</button>
+                            <button className={styles.btnSecondary} onClick={finish}>Skip</button>
                             <button className={styles.btnPrimary} onClick={finish}>
                                 Get Started <ArrowRight size={16} />
                             </button>

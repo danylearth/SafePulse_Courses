@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 import { useAuth } from '@/lib/authContext';
 import styles from './Sidebar.module.css';
 import {
@@ -18,6 +19,7 @@ import {
 } from 'lucide-react';
 
 const studentLinks = [
+    { href: '/lessons/athlete-code', label: 'Guides', icon: BookOpen },
     { href: '/courses/athlete-code', label: 'Courses', icon: Library },
 ];
 
@@ -40,6 +42,7 @@ export default function Sidebar({ isAdmin = false, onOpenSettings, collapsed = f
     const pathname = usePathname();
     const { user } = useAuth();
     const links = isAdmin ? adminLinks : studentLinks;
+    const [activeNavIndex, setActiveNavIndex] = useState(0);
 
     return (
         <aside className={`${styles.sidebar} ${collapsed ? styles.collapsed : ''}`}>
@@ -67,17 +70,17 @@ export default function Sidebar({ isAdmin = false, onOpenSettings, collapsed = f
             </div>
 
             <nav className={styles.nav}>
-                {links.map((link) => {
+                {links.map((link, index) => {
                     const Icon = link.icon;
-                    const isActive = pathname === link.href ||
-                        (link.href !== '/dashboard' && link.href !== '/admin' && pathname.startsWith(link.href));
+                    const isActive = index === activeNavIndex;
 
                     return (
                         <Link
-                            key={link.href}
+                            key={`${link.href}-${link.label}-${index}`}
                             href={link.href}
                             className={`${styles.navItem} ${isActive ? styles.active : ''}`}
                             title={collapsed ? link.label : undefined}
+                            onClick={() => setActiveNavIndex(index)}
                         >
                             <Icon size={20} />
                             {!collapsed && <span>{link.label}</span>}

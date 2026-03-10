@@ -22,6 +22,7 @@ import {
     MonitorSmartphone,
     Save,
     LogOut,
+    CheckCircle2,
 } from 'lucide-react';
 
 // --- Types ---
@@ -61,9 +62,19 @@ interface AccountSettingsModalProps {
 }
 
 export default function AccountSettingsModal({ isOpen, onClose }: AccountSettingsModalProps) {
-    const { logout } = useAuth();
+    const { logout, user, updateUser } = useAuth();
     const router = useRouter();
     const [activeTab, setActiveTab] = useState<TabId>('profile');
+
+    // Profile state for saving
+    const [profileData, setProfileData] = useState<any>(null);
+
+    const handleSaveChanges = () => {
+        if (profileData) {
+            updateUser(profileData);
+        }
+        onClose();
+    };
 
     // Notification toggles
     const [notifCourseUpdates, setNotifCourseUpdates] = useState(true);
@@ -146,7 +157,7 @@ export default function AccountSettingsModal({ isOpen, onClose }: AccountSetting
                     </div>
 
                     <div className={styles.content}>
-                        {activeTab === 'profile' && <ProfileSection />}
+                        {activeTab === 'profile' && <ProfileSection user={user} onDataChange={setProfileData} />}
                         {activeTab === 'security' && (
                             <SecuritySection twoFactor={twoFactor} setTwoFactor={setTwoFactor} />
                         )}
@@ -171,7 +182,7 @@ export default function AccountSettingsModal({ isOpen, onClose }: AccountSetting
 
                     <div className={styles.footer}>
                         <button className={styles.cancelBtn} onClick={onClose}>Cancel</button>
-                        <button className={styles.saveBtn}>
+                        <button className={styles.saveBtn} onClick={handleSaveChanges}>
                             <Save size={16} />
                             Save Changes
                         </button>
@@ -184,7 +195,72 @@ export default function AccountSettingsModal({ isOpen, onClose }: AccountSetting
 
 /* ===== Sub-sections ===== */
 
-function ProfileSection() {
+function ProfileSection({ user, onDataChange }: { user: any; onDataChange: (data: any) => void }) {
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [username, setUsername] = useState('');
+    const [bio, setBio] = useState('');
+
+    // Address fields
+    const [street, setStreet] = useState('');
+    const [city, setCity] = useState('');
+    const [state, setState] = useState('');
+    const [postcode, setPostcode] = useState('');
+    const [country, setCountry] = useState('');
+
+    // Professions
+    const [professions, setProfessions] = useState<string[]>([]);
+
+    // Initialize from user on mount
+    useEffect(() => {
+        if (user) {
+            const nameParts = user.name?.split(' ') || [];
+            setFirstName(nameParts[0] || '');
+            setLastName(nameParts.slice(1).join(' ') || '');
+            setUsername(user.username || '');
+            setStreet(user.address?.street || '');
+            setCity(user.address?.city || '');
+            setState(user.address?.state || '');
+            setPostcode(user.address?.postcode || '');
+            setCountry(user.address?.country || '');
+            setProfessions(user.professions || []);
+        }
+    }, [user]);
+
+    // Update parent whenever any field changes
+    useEffect(() => {
+        onDataChange({
+            name: `${firstName} ${lastName}`.trim(),
+            username,
+            address: {
+                street,
+                city,
+                state,
+                postcode,
+                country,
+            },
+            professions,
+        });
+    }, [firstName, lastName, username, street, city, state, postcode, country, professions, onDataChange]);
+
+    const getInitials = () => {
+        if (!user) return '??';
+        const nameParts = user.name?.split(' ') || [];
+        return nameParts.map(p => p[0]).join('').toUpperCase().slice(0, 2) || '??';
+    };
+
+    const PROFESSIONS = [
+        'Physician', 'Nurse', 'Paramedic', 'Pharmacist',
+        'Personal Trainer', 'Strength Coach', 'Athlete',
+        'Researcher', 'Student', 'Other',
+    ];
+
+    const toggleProfession = (p: string) => {
+        setProfessions((prev) =>
+            prev.includes(p) ? prev.filter((x) => x !== p) : [...prev, p]
+        );
+    };
+
     return (
         <>
             <div className={styles.section}>
@@ -192,7 +268,7 @@ function ProfileSection() {
                 <div className={styles.sectionCard}>
                     <div className={styles.avatarRow}>
                         <div className={styles.avatarWrapper}>
-                            <div className={styles.avatarLarge}>SP</div>
+                            <div className={styles.avatarLarge}>{getInitials()}</div>
                             <button className={styles.avatarOverlay} aria-label="Change avatar">
                                 <Camera size={20} />
                             </button>
@@ -211,29 +287,133 @@ function ProfileSection() {
                     <div className={styles.formGrid}>
                         <div className={styles.formGroup}>
                             <label>First Name</label>
-                            <input type="text" className={styles.formInput} defaultValue="SafePulse" placeholder="First name" />
+                            <input
+                                type="text"
+                                className={styles.formInput}
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                                placeholder="First name"
+                            />
                         </div>
                         <div className={styles.formGroup}>
                             <label>Last Name</label>
-                            <input type="text" className={styles.formInput} defaultValue="Student" placeholder="Last name" />
+                            <input
+                                type="text"
+                                className={styles.formInput}
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                                placeholder="Last name"
+                            />
                         </div>
                         <div className={`${styles.formGroup} ${styles.fullWidth}`}>
                             <label>Email</label>
                             <div className={styles.emailRow}>
-                                <input type="email" className={styles.formInput} defaultValue="student@safepulse.com" readOnly />
+                                <input type="email" className={styles.formInput} value={user?.email || ''} readOnly />
                                 <span className={styles.verifiedBadge}>
                                     <Check size={12} /> Verified
                                 </span>
                             </div>
                         </div>
                         <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-                            <label>Display Name</label>
-                            <input type="text" className={styles.formInput} defaultValue="safepulse_student" placeholder="Display name" />
+                            <label>Username</label>
+                            <input
+                                type="text"
+                                className={styles.formInput}
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value.replace(/\s/g, '').toLowerCase())}
+                                placeholder="username"
+                            />
                         </div>
                         <div className={`${styles.formGroup} ${styles.fullWidth}`}>
                             <label>Bio</label>
-                            <textarea className={styles.formInput} placeholder="Tell us a bit about yourself..." defaultValue="Health optimization enthusiast focused on evidence-based performance science." />
+                            <textarea
+                                className={styles.formInput}
+                                value={bio}
+                                onChange={(e) => setBio(e.target.value)}
+                                placeholder="Tell us a bit about yourself..."
+                            />
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className={styles.section}>
+                <span className={styles.sectionLabel}>Address</span>
+                <div className={styles.sectionCard}>
+                    <div className={styles.formGrid}>
+                        <div className={`${styles.formGroup} ${styles.fullWidth}`}>
+                            <label>Street Address</label>
+                            <input
+                                type="text"
+                                className={styles.formInput}
+                                value={street}
+                                onChange={(e) => setStreet(e.target.value)}
+                                placeholder="123 Main Street"
+                            />
+                        </div>
+                        <div className={styles.formGroup}>
+                            <label>City</label>
+                            <input
+                                type="text"
+                                className={styles.formInput}
+                                value={city}
+                                onChange={(e) => setCity(e.target.value)}
+                                placeholder="City"
+                            />
+                        </div>
+                        <div className={styles.formGroup}>
+                            <label>State / Province</label>
+                            <input
+                                type="text"
+                                className={styles.formInput}
+                                value={state}
+                                onChange={(e) => setState(e.target.value)}
+                                placeholder="State"
+                            />
+                        </div>
+                        <div className={styles.formGroup}>
+                            <label>Postcode / ZIP</label>
+                            <input
+                                type="text"
+                                className={styles.formInput}
+                                value={postcode}
+                                onChange={(e) => setPostcode(e.target.value)}
+                                placeholder="Postcode"
+                            />
+                        </div>
+                        <div className={styles.formGroup}>
+                            <label>Country</label>
+                            <input
+                                type="text"
+                                className={styles.formInput}
+                                value={country}
+                                onChange={(e) => setCountry(e.target.value)}
+                                placeholder="Country"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className={styles.section}>
+                <span className={styles.sectionLabel}>Profession</span>
+                <div className={styles.sectionCard}>
+                    <p className="text-sm text-secondary" style={{ marginBottom: 'var(--space-md)' }}>
+                        Select all that apply — helps us personalise your experience
+                    </p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-sm)' }}>
+                        {PROFESSIONS.map((p) => (
+                            <button
+                                key={p}
+                                type="button"
+                                className={`btn btn-sm ${professions.includes(p) ? 'btn-primary' : 'btn-ghost'}`}
+                                onClick={() => toggleProfession(p)}
+                                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+                            >
+                                {professions.includes(p) && <CheckCircle2 size={13} />}
+                                {p}
+                            </button>
+                        ))}
                     </div>
                 </div>
             </div>

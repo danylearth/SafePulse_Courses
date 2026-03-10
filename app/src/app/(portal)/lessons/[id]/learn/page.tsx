@@ -94,43 +94,10 @@ async function loadDynamicCourse(courseId: string): Promise<DynamicCourseManifes
     if (courseId === 'athlete-code') {
         const { athleteCodeCourse } = await import('@/data/courses/athlete-code');
 
-        // Simplified 10-lesson curriculum for COURSES learn page (7 articles + 3 quizzes)
-        // For the full 50-lesson version, see /lessons/[id]/learn
-        const simplifiedLessons = [
-            athleteCodeCourse.lessons[0],  // Glossary
-            athleteCodeCourse.lessons[1],  // Welcome & Guiding Ethos
-            athleteCodeCourse.lessons[2],  // Introduction
-            {
-                id: 'ac-q1',
-                title: 'Quiz: Course Foundations',
-                type: 'quiz' as const,
-                duration: '5min',
-                quizImport: () => import('@/data/courses/athlete-code/quizzes/quiz-sleep-recovery')
-            },
-            athleteCodeCourse.lessons[3],  // Rationale Behind PES Use in Enhanced Games
-            athleteCodeCourse.lessons[7],  // Risk vs Reward
-            athleteCodeCourse.lessons[22], // PES Approved for Use by Enhanced Games
-            {
-                id: 'ac-q2',
-                title: 'Quiz: PES Safety & Guidelines',
-                type: 'quiz' as const,
-                duration: '5min',
-                quizImport: () => import('@/data/courses/athlete-code/quizzes/quiz-physical-activity')
-            },
-            athleteCodeCourse.lessons[24], // Proposed Athlete Enhancement Protocols
-            athleteCodeCourse.lessons[46], // Ethical Framework
-            {
-                id: 'ac-q3',
-                title: 'Quiz: Ethics & Protocols',
-                type: 'quiz' as const,
-                duration: '5min',
-                quizImport: () => import('@/data/courses/athlete-code/quizzes/quiz-cardiovascular')
-            },
-        ];
-
+        // LESSONS learn page: All 50 article lessons (NO quizzes)
         return {
             title: athleteCodeCourse.title,
-            lessons: simplifiedLessons,
+            lessons: athleteCodeCourse.lessons,
         };
     }
     return null;
@@ -170,15 +137,16 @@ export default function LearnPage() {
         loadDynamicCourse(courseId).then((manifest) => {
             if (manifest) {
                 setDynamicCourse(manifest);
-                // Load progress from localStorage
-                const progress = getCourseProgress(courseId);
+                // Load progress from localStorage (use "lessons-" prefix to separate from courses)
+                const progressKey = `lessons-${courseId}`;
+                const progress = getCourseProgress(progressKey);
                 setDynamicLessons(
                     manifest.lessons.map((l) => ({
                         id: l.id,
                         title: l.title,
                         type: l.type,
                         duration: l.duration,
-                        completed: isLessonComplete(courseId, l.id),
+                        completed: isLessonComplete(progressKey, l.id),
                     }))
                 );
                 // Set active lesson to last accessed or first lesson
@@ -242,8 +210,9 @@ export default function LearnPage() {
                 }))
             );
         } else {
-            // Persist to localStorage
-            persistLessonComplete(courseId, lessonId);
+            // Persist to localStorage with "lessons-" prefix
+            const progressKey = `lessons-${courseId}`;
+            persistLessonComplete(progressKey, lessonId);
             // Update local state
             setDynamicLessons((prev) =>
                 prev.map((lesson) =>
@@ -394,7 +363,7 @@ export default function LearnPage() {
             ));
         }
 
-        // Dynamic course: flat lesson list
+        // Dynamic course: flat lesson list (no completion circles)
         return (
             <div className={styles.navSection}>
                 <div className={styles.navLessons}>
@@ -405,18 +374,9 @@ export default function LearnPage() {
                             onClick={() => goToLesson(lesson.id)}
                         >
                             <div className={styles.navLessonLeft}>
-                                {lesson.type === 'quiz' ? (
-                                    <Award size={14} />
-                                ) : (
-                                    <FileText size={14} />
-                                )}
+                                <FileText size={14} />
                                 <span>{lesson.title}</span>
                             </div>
-                            {lesson.completed ? (
-                                <CheckCircle2 size={16} className={styles.completedIcon} />
-                            ) : (
-                                <Circle size={16} className={styles.incompleteIcon} />
-                            )}
                         </button>
                     ))}
                 </div>
@@ -596,11 +556,11 @@ export default function LearnPage() {
             // Quiz start screen
             if (!quizStarted) {
                 return (
-                    <div className={styles.quizIntro}>
+                    <div className={styles.quizStart}>
                         <div className={styles.quizIcon}><Award size={48} /></div>
-                        <h2>Module Quiz</h2>
+                        <h2>{currentLesson.title}</h2>
                         <p className="text-secondary">
-                            Test your understanding of the material covered in this section. You can retake the quiz as many times as you need.
+                            Test your understanding of the material covered. You can retake the quiz as many times as you need.
                         </p>
                         <button className="btn btn-primary btn-lg" onClick={() => setQuizStarted(true)}>
                             Start Quiz
@@ -665,23 +625,11 @@ export default function LearnPage() {
             {/* Sidebar */}
             <aside className={`${styles.sidebar} ${sidebarOpen ? '' : styles.sidebarHidden}`}>
                 <div className={styles.sidebarHeader}>
-                    <div className={styles.toggleBtn} onClick={() => setSidebarOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', background: 'none', border: 'none', color: 'var(--text-secondary)', fontSize: '0.85rem', cursor: 'pointer', padding: '4px' }}>
+                    <button className={styles.toggleBtn} onClick={() => setSidebarOpen(false)}>
                         <Menu size={18} />
                         <span>Hide</span>
-                    </div>
-
-                    {/* Progress Section with Course Title */}
-                    <div className={styles.progressSection}>
-                        <div className={styles.progressHeader}>
-                            <Link href={`/courses/${courseId}`} className={styles.progressInfo}>
-                                <span className={styles.courseTitle}>{courseTitle}</span>
-                                <span className={styles.progressPercent}>{progress}%</span>
-                            </Link>
-                        </div>
-                        <div className="progress-bar" style={{ height: '6px' }}>
-                            <div className="progress-bar-fill" style={{ width: `${progress}%` }}></div>
-                        </div>
-                    </div>
+                    </button>
+                    <h3 className={styles.courseTitle}>{courseTitle}</h3>
                 </div>
 
                 <nav className={styles.sidebarNav}>
@@ -707,20 +655,16 @@ export default function LearnPage() {
                     >
                         <ChevronLeft size={16} /> Previous
                     </button>
-                    {!currentLesson?.completed && currentLesson?.type !== 'quiz' && (
-                        <button className="btn btn-primary" onClick={handleMarkComplete}>
-                            <CheckCircle2 size={16} /> Mark Complete
-                        </button>
-                    )}
-                    {currentLesson?.completed && (
-                        <span className={styles.completedBadge}>
-                            <CheckCircle2 size={16} /> Completed
-                        </span>
-                    )}
                     <button
                         className="btn btn-ghost"
                         onClick={() => {
-                            if (currentIndex < allLessons.length - 1) goToLesson(allLessons[currentIndex + 1].id);
+                            // Mark current lesson complete, then navigate to next
+                            if (!isDemoCourse && !currentLesson?.completed) {
+                                markLessonComplete(activeLessonId);
+                            }
+                            if (currentIndex < allLessons.length - 1) {
+                                goToLesson(allLessons[currentIndex + 1].id);
+                            }
                         }}
                         disabled={currentIndex >= allLessons.length - 1}
                     >

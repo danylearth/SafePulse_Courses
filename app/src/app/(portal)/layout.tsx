@@ -39,10 +39,17 @@ export default function PortalLayout({
 
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-    const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(isLearnPage);
+    const [isTransitioning, setIsTransitioning] = useState(false);
 
-    // Auto-collapse main sidebar on learn pages so the lesson sidebar has room
-    const effectiveSidebarCollapsed = isLearnPage || sidebarCollapsed;
+    // Auto-collapse main sidebar on learn pages (but allow manual override)
+    useEffect(() => {
+        if (isLearnPage) {
+            setSidebarCollapsed(true);
+        }
+    }, [pathname]); // Only when pathname changes, not when isLearnPage changes
+
+    const effectiveSidebarCollapsed = sidebarCollapsed;
 
     // Search state
     const [searchQuery, setSearchQuery] = useState('');
@@ -68,6 +75,13 @@ export default function PortalLayout({
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [handleClickOutside]);
+
+    // Page transition effect on route change
+    useEffect(() => {
+        setIsTransitioning(true);
+        const timer = setTimeout(() => setIsTransitioning(false), 300);
+        return () => clearTimeout(timer);
+    }, [pathname]);
 
     return (
         <AuthGuard>
@@ -163,7 +177,7 @@ export default function PortalLayout({
                             >{initials}</div>
                         </div>
                     </header>
-                    <main className={styles.content}>
+                    <main className={`${styles.content} ${isTransitioning ? styles.pageTransition : ''}`}>
                         {children}
                     </main>
                 </div>

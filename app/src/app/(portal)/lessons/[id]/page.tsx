@@ -98,22 +98,7 @@ function getAthleteCodeCourseData(): CourseData | null {
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         const { athleteCodeCourse } = require('@/data/courses/athlete-code');
 
-        // Simplified 10-lesson preview for course detail page (7 articles + 3 quizzes)
-        // Note: The full 50-lesson course is still accessible in the learn page
-        const simplifiedLessons = [
-            athleteCodeCourse.lessons[0],  // Glossary
-            athleteCodeCourse.lessons[1],  // Welcome & Guiding Ethos
-            athleteCodeCourse.lessons[2],  // Introduction
-            { id: 'ac-q1', title: 'Quiz: Course Foundations', type: 'quiz', duration: '5min' },
-            athleteCodeCourse.lessons[3],  // Rationale Behind PES Use
-            athleteCodeCourse.lessons[7],  // Risk vs Reward
-            athleteCodeCourse.lessons[22], // PES Approved for Use by Enhanced Games
-            { id: 'ac-q2', title: 'Quiz: PES Safety & Guidelines', type: 'quiz', duration: '5min' },
-            athleteCodeCourse.lessons[24], // Proposed Athlete Enhancement Protocols
-            athleteCodeCourse.lessons[46], // Ethical Framework
-            { id: 'ac-q3', title: 'Quiz: Ethics & Protocols', type: 'quiz', duration: '5min' },
-        ];
-
+        // Full 50-lesson course for LESSONS detail page
         return {
             id: 'athlete-code',
             title: athleteCodeCourse.title,
@@ -127,16 +112,16 @@ function getAthleteCodeCourseData(): CourseData | null {
             coverColor: athleteCodeCourse.coverColor,
             thumbnailUrl: '/enhanced-games-hero.webp',
             totalSections: 1,
-            totalLessons: 10,
-            totalDuration: '~3 hours',
+            totalLessons: athleteCodeCourse.totalLessons,
+            totalDuration: athleteCodeCourse.duration,
             includes: [
-                { icon: FileText, text: '7 articles & reading materials' },
-                { icon: Award, text: '3 interactive quizzes' },
-                { icon: Shield, text: 'Certificate of completion' },
+                { icon: FileText, text: '50 articles & reading materials' },
+                { icon: Award, text: 'Certificate of completion' },
+                { icon: Shield, text: 'Lifetime access' },
             ],
             sections: [{
                 title: 'Enhanced Games Athlete Code',
-                lessons: simplifiedLessons.map((l: { title: string; type: string; duration: string }) => ({
+                lessons: athleteCodeCourse.lessons.map((l: { title: string; type: string; duration: string }) => ({
                     title: l.title,
                     type: l.type,
                     duration: l.duration,
@@ -162,7 +147,7 @@ export default function CourseDetailPage() {
     const isAthleteCode = courseId === 'athlete-code';
     const [expandedSections, setExpandedSections] = useState<number[]>([0]);
 
-    // Calculate progress from localStorage
+    // Calculate progress from localStorage (using "lessons-" prefix)
     const [enrolledProgress, setEnrolledProgress] = useState({
         enrolled: false,
         progress: 0,
@@ -174,7 +159,8 @@ export default function CourseDetailPage() {
 
     useEffect(() => {
         // Load progress on mount and when course changes
-        const progress = calculateProgress(courseId, course.totalLessons);
+        const progressKey = `lessons-${courseId}`;
+        const progress = calculateProgress(progressKey, course.totalLessons);
         setEnrolledProgress(prev => ({
             ...prev,
             enrolled: false, // Set to false for now (will be managed by auth later)
@@ -198,7 +184,7 @@ export default function CourseDetailPage() {
         <div className={styles.page}>
             {/* Breadcrumb */}
             <div className={styles.breadcrumb}>
-                <Link href="/courses">Courses</Link>
+                <Link href="/lessons/athlete-code">Guides</Link>
                 <span>/</span>
                 <span>{course.title}</span>
             </div>
@@ -338,13 +324,13 @@ export default function CourseDetailPage() {
                                 )}
 
                                 <Link
-                                    href={`/courses/${params?.id || course.id}/learn`}
+                                    href={`/lessons/${params?.id || course.id}/learn`}
                                     className="btn btn-primary btn-lg w-full"
                                 >
-                                    <Play size={18} /> {enrolledProgress.progress > 0 ? 'Continue Learning' : 'Start Course'}
+                                    <Play size={18} /> {enrolledProgress.progress > 0 ? 'Continue Learning' : 'Start Guide'}
                                 </Link>
                                 <span className="text-xs text-center" style={{ color: 'var(--text-tertiary)', marginTop: 'var(--space-sm)' }}>
-                                    <RotateCcw size={14} style={{ display: 'inline', marginRight: '4px' }} /> Restart Course
+                                    <RotateCcw size={14} style={{ display: 'inline', marginRight: '4px' }} /> Restart Guide
                                 </span>
 
                                 <div className={styles.includesList}>

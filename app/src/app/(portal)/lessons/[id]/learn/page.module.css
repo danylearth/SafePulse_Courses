@@ -33,18 +33,6 @@
     gap: var(--space-md);
 }
 
-.progressSection {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
-}
-
-.progressHeader {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
 .toggleBtn {
     display: flex;
     align-items: center;
@@ -65,24 +53,26 @@
     font-size: 0.95rem;
     font-weight: 500;
     line-height: 1.4;
-    flex: 1;
 }
 
 .progressInfo {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: var(--space-sm);
     cursor: pointer;
     text-decoration: none;
     border-radius: var(--radius-sm);
-    padding: 4px 0;
-    transition: opacity var(--transition-fast);
-    width: 100%;
+    padding: 4px 6px;
+    margin: -4px -6px;
+    transition: background var(--transition-fast);
 }
 
 .progressInfo:hover {
-    opacity: 0.8;
+    background: var(--bg-surface);
+}
+
+.progressInfo:hover .progressPercent {
+    text-decoration: underline;
 }
 
 .progressPercent {
