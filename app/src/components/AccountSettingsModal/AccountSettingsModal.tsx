@@ -246,7 +246,7 @@ function ProfileSection({ user, onDataChange }: { user: any; onDataChange: (data
     const getInitials = () => {
         if (!user) return '??';
         const nameParts = user.name?.split(' ') || [];
-        return nameParts.map(p => p[0]).join('').toUpperCase().slice(0, 2) || '??';
+        return nameParts.map((p: string) => p[0]).join('').toUpperCase().slice(0, 2) || '??';
     };
 
     const PROFESSIONS = [

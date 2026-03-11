@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from './page.module.css';
@@ -63,7 +63,7 @@ interface CourseData {
     thumbnailUrl: string | null;
     tags: string[];
     includes: string[];
-    status: 'Draft' | 'Published';
+    status: 'Draft' | 'Published' | 'Archived';
     sections: Section[];
     quizQuestions: QuizQuestion[];
 }
@@ -124,7 +124,7 @@ const categories = ['Safety', 'Performance', 'Longevity', 'Uplift', 'Education',
 const steps = ['Course Details', 'Curriculum', 'Quizzes', 'Review'];
 
 /* ───────────── Component ───────────── */
-export default function NewCoursePage() {
+function NewCoursePageContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const editId = searchParams?.get('edit');
@@ -1447,5 +1447,13 @@ export default function NewCoursePage() {
                 </div>
             )}
         </div>
+    );
+}
+
+export default function NewCoursePage() {
+    return (
+        <Suspense fallback={<div style={{ padding: 24 }}>Loading...</div>}>
+            <NewCoursePageContent />
+        </Suspense>
     );
 }
