@@ -11,7 +11,7 @@ function LoginInner() {
     const { login } = useAuth();
     const router = useRouter();
     const searchParams = useSearchParams();
-    const redirectTo = searchParams.get('redirect') || '/dashboard';
+    const redirectTo = searchParams.get('redirect') || '/lessons/athlete-code';
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

@@ -13,17 +13,26 @@ SafePulse Academy is a Next.js-based online course platform focused on performan
 cd app && npm install
 
 # Development server (runs on http://localhost:3000)
-npm run dev
+cd app && npm run dev
 
 # Production build
-npm run build
+cd app && npm run build
 
 # Start production server
-npm start
+cd app && npm start
 
 # Lint codebase
-npm run lint
+cd app && npm run lint
 ```
+
+## Deployment
+
+The project is configured for Railway deployment using nixpacks:
+- **Build directory**: `app/` (set via `NIXPACKS_PATH` in `nixpacks.toml`)
+- **Install**: `npm ci`
+- **Build**: `npm run build`
+- **Start**: `npm start`
+- Requires Node.js 22 for Next.js 16+ compatibility
 
 ## Architecture
 
@@ -48,7 +57,8 @@ app/
 │   │   │   ├── courses/
 │   │   │   │   └── [id]/
 │   │   │   │       ├── page.tsx          # Course detail
-│   │   │   │       └── learn/page.tsx    # Course player
+│   │   │   │       └── learn/            # Course player route
+│   │   │   │           └── page.tsx      # Course player component
 │   │   │   └── my-courses/
 │   │   ├── (admin)/           # Admin portal route group
 │   │   │   └── admin/
@@ -69,7 +79,8 @@ app/
 │   │   └── NotificationPanel/
 │   ├── lib/                   # Utility libraries
 │   │   ├── authContext.tsx    # Auth state management
-│   │   └── courseStore.ts     # Course data store (localStorage)
+│   │   ├── courseStore.ts     # Course data store (localStorage)
+│   │   └── progressStore.ts   # Course progress tracking (localStorage)
 │   └── data/                  # Static course content
 │       └── courses/
 │           └── athlete-code/  # 50-lesson course on Enhanced Games
@@ -126,9 +137,13 @@ interface AuthUser {
 
 ### State Management
 
-- **Auth**: React Context + localStorage (`authContext.tsx`)
+- **Auth**: React Context + localStorage (`authContext.tsx`, key: `sp_auth`)
 - **Courses**: localStorage + utility functions (`courseStore.ts`)
-- **Theme**: localStorage + CSS custom properties (`safepulse-theme` key)
+- **Progress**: localStorage + utility functions (`progressStore.ts`, key: `safepulse_course_progress`)
+  - Tracks completed lessons per course per user
+  - Stores last accessed lesson for resume functionality
+  - Functions: `getCourseProgress()`, `markLessonComplete()`, `calculateProgress()`, `isLessonComplete()`, `resetCourseProgress()`
+- **Theme**: localStorage + CSS custom properties (key: `safepulse-theme`)
 - **UI State**: Local component state (sidebar, modals, etc.)
 
 ### Course Player (`/courses/[id]/learn`)
@@ -205,12 +220,15 @@ import Sidebar from '@/components/Sidebar/Sidebar';
 
 ## Important Notes
 
-- All data is client-side (localStorage) - no database yet
-- Auth is not secure - purely for UI demonstration
-- Course enrollment/purchase not implemented - uses mock data
-- Admin and student portals share same Sidebar component with `isAdmin` prop
-- Learn page auto-collapses main sidebar to show lesson sidebar
-- Version migration system in `courseStore.ts` (`CURRENT_VERSION` constant)
+- **All data is client-side** (localStorage) - no database yet
+- **Auth is not secure** - purely for UI demonstration
+- **Course enrollment/purchase** not implemented - uses mock data
+- **Shared components**: Admin and student portals share same Sidebar component with `isAdmin` prop
+- **Learn page behavior**: Auto-collapses main sidebar to show lesson sidebar
+- **Data persistence**:
+  - Version migration system in `courseStore.ts` (`CURRENT_VERSION` constant)
+  - Progress tracking separated into dedicated `progressStore.ts`
+  - All localStorage keys prefixed with `sp_` or `safepulse_`
 
 ## Working with the Athlete Code Course
 

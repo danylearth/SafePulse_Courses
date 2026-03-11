@@ -10,7 +10,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!isLoading) {
-      router.replace(isLoggedIn ? '/dashboard' : '/signup');
+      router.replace(isLoggedIn ? '/lessons/athlete-code' : '/signup');
     }
   }, [isLoggedIn, isLoading, router]);
 

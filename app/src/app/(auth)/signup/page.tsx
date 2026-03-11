@@ -29,7 +29,7 @@ function SignupInner() {
     const { login } = useAuth();
     const router = useRouter();
     const searchParams = useSearchParams();
-    const redirectTo = searchParams.get('redirect') || '/dashboard';
+    const redirectTo = searchParams.get('redirect') || '/lessons/athlete-code';
 
     const [step, setStep] = useState(1);
     const [showPassword, setShowPassword] = useState(false);
